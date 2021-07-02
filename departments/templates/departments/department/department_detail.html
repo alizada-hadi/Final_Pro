@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Detail
+{% endblock title %}
+
+
+{% block page_title %}
+   {{ department.dep_name }} Detail
+{% endblock page_title %}
+
+
+{% block breadcrumb %}
+<ol class="breadcrumb m-0">
+        <li class="breadcrumb-item"><a href="{% url 'department-list' %}">Department List</a></li>
+        <li class="breadcrumb-item active">
+            {{ department.dep_name }}
+        </li>
+</ol>
+{% endblock breadcrumb %}
+
+
+{% block content %}
+<script src="{% static 'assets/libs/jquery/jquery.min.js' %}"></script>
+
+<div class="row">
+    <div class="col-10 m-auto">
+        <div class="card">
+            <div class="card-body">
+
+                <h4 class="card-title">
+                    Department of {{ department.dep_name }} 
+                </h4>
+                <p class="text-muted">
+                Establish Date :     {{ department.dep_publish_date|date:"Y M, d" }}
+                </p>
+                <hr>
+                <ul class="nav nav-pills nav-justified" role="tablist">
+                    <li class="nav-item waves-effect waves-light">
+                        <a class="nav-link active" data-toggle="tab" href="#home-1" role="tab">
+                            <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                            <span class="d-none d-sm-block">Department Plan/Strategy</span> 
+                        </a>
+                    </li>
+                    <li class="nav-item waves-effect waves-light">
+                        <a class="nav-link" data-toggle="tab" href="#profile-1" role="tab">
+                            <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
+                            <span class="d-none d-sm-block">Instructors</span> 
+                        </a>
+                    </li>
+                    <li class="nav-item waves-effect waves-light">
+                        <a class="nav-link" data-toggle="tab" href="#messages-1" role="tab">
+                            <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
+                            <span class="d-none d-sm-block">Students</span>   
+                        </a>
+                    </li>
+                    <li class="nav-item waves-effect waves-light">
+                        <a class="nav-link" data-toggle="tab" href="#settings-1" role="tab">
+                            <span class="d-block d-sm-none"><i class="fas fa-cog"></i></span>
+                            <span class="d-none d-sm-block">Curriculum List</span>    
+                        </a>
+                    </li>
+                </ul>                     
+        
+                <div class="tab-content p-3 text-muted">
+                    <div class="tab-pane active" id="home-1" role="tabpanel">
+                        {{ department.content|safe }}
+                    </div>
+                    <div class="tab-pane" id="profile-1" role="tabpanel">
+                        Department Instructors here....
+                    </div>
+                    <div class="tab-pane" id="messages-1" role="tabpanel">
+                        Department Students List here....
+                    </div>
+                    <div class="tab-pane" id="settings-1" role="tabpanel">
+                        <div class="row my-2">
+                            {% for i in curriculums %}
+                                <div class="col-lg-6 my-2">
+                                    <h4 class="card-title farsi">
+                                        Semester {{ forloop.counter }}
+                                    </h4>
+                                    <div class="table-responsive" style="background-color: white; border: 1px solid;">
+                                        <table class="table table-hover mb-0">
+                                    
+                                            <thead>
+                                                <tr>
+                                                    <th class="farsi">#</th>
+                                                    <th class="farsi">Curriculum Code</th>
+                                                    <th class="farsi">Curriculum Name</th>
+                                                    <th class="farsi"> Curriculum Credit </th>
+                                                </tr>                                
+                                            </thead>
+                                            <tbody>
+                                                {% for info in i %}                           
+                                                    <tr class="clickable-row" data-href="{% url 'curriculum-update' info.slug %}">
+                                                        <th scope="row">{{ forloop.counter }}</th>
+                                                        <td>{{ info.curr_code }}</td>
+                                                        <td> {{ info.curr_name }} </td>
+                                                        <td>{{ info.curr_credit }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <p class=""> Total </p>
+                                                    </td>
+                                                    <td>
+                                                        
+                                                    </td>
+                                                </tr>  
+                                            </tbody>                            
+                                        </table>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>                        <!-- Tab panes -->
+                                        
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    (function ($) {
+      $('.clickable-row').css('cursor', 'pointer');
+      $(".clickable-row").click(function () {
+        window.location = $(this).data("href");
+      });
+    })(jQuery)
+
+</script>
+{% endblock content %}

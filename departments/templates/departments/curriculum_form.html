@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    {% if object %}
+    Update Curriculum
+    {% else %}
+    Create Curriculum
+    {% endif %}
+{% endblock title %}
+
+
+{% block page_title %}
+    {% if object %}
+        Update "{{ object.curr_name }}"
+    {% else %}
+    Create New Curriculum
+    {% endif %}
+{% endblock page_title %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb m-0">
+        <li class="breadcrumb-item"><a href="">Curriculum List</a></li>
+        <li class="breadcrumb-item active">
+            {% if object %}
+            {{ object.curr_name }}
+            {% else %}
+            Create Curriculum
+            {% endif %}
+        </li>
+</ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+<div class="row">
+    <div class="col-10 m-auto">
+        <div class="card">
+            <div class="card-body">
+
+                <h4 class="card-title">
+                    {% if object %}
+                   {{ object.curr_name }}
+                    {% else %}
+                    Curriculum Form
+                    {% endif %}
+                </h4>
+                <hr>
+
+                <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.media }}
+                <div class="row my-2 mx-4">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="">Department</label>
+                            {% render_field form.department class="form-control"%}
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="">Curriculum Code</label>
+                            {% render_field form.curr_code class="form-control" placeholder="IS3201" %}
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="">Curriculum</label>
+                            {% render_field form.curr class="form-control" %}
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="">Curriculum Name</label>
+                            {% render_field form.curr_name class="form-control" placeholder="Computer Science 1"  %}
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="">Curriculum Credit</label>
+                            {% render_field form.curr_credit class="form-control" placeholder="4"  %}
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="">Curriculum Semester</label>
+                            {% render_field form.curr_semester class="form-control" %}
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="">Curriculum Type</label>
+                            {% render_field form.curr_type class="form-control"   %}
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="">Curriculum Overview</label>
+                            {% render_field form.curr_description class="form-control"   %}
+                        </div>
+                    </div>
+                </div>
+                {% if object %}
+                <button class="ml-4 btn btn-primary btn-md font-size-18">Update</button>
+                <a class="btn btn-info font-size-18" href="{% url 'curriculum-detail' object.slug %}">
+                    <i class="bx bx-dots-horizontal"></i>
+                </a>
+                <a href="{% url 'curriculum-delete' object.slug %}" class="btn btn-danger font-size-18">
+                    <i class="fa fa-trash"></i>
+                </a>
+                {% else %}
+                <button class="ml-4 btn btn-primary btn-md">Create</button>
+                {% endif %}
+                </form>
+            </div>
+        </div>
+    </div> 
+</div>
+{% endblock content %}

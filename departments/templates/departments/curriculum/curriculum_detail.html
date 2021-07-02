@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Detail
+{% endblock title %}
+
+
+{% block page_title %}
+   {{ object.curr_name }} Detail
+{% endblock page_title %}
+
+
+{% block breadcrumb %}
+<ol class="breadcrumb m-0">
+        <li class="breadcrumb-item"><a href="{% url 'curriculum-list' %}">Curriculum List</a></li>
+        <li class="breadcrumb-item active">
+            {{ object.curr_name }}
+        </li>
+</ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+<div class="row">
+    <div class="col-10 m-auto">
+        <div class="card">
+            <div class="card-body">
+
+                <h4 class="card-title">
+                    {{ object.curr_name }}
+                </h4>
+                <hr>
+                <h4>
+                    {{ object.curr_name }}
+                </h4>
+                <p class="font-size-18">
+                    {{ object.curr_description|safe }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
