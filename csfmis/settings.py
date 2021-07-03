@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     # custom apps
     "accounts.apps.AccountsConfig",
     "departments.apps.DepartmentsConfig",
+    "students.apps.StudentsConfig",
 ]
 
 MIDDLEWARE = [
@@ -60,6 +61,8 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'csfmis.urls'
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
+CKEDITOR_IMAGE_BACKEND = 'pillow'
 
 TEMPLATES = [
     {
@@ -124,6 +127,9 @@ USE_L10N = True
 USE_TZ = True
 
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
@@ -132,6 +138,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

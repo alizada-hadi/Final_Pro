@@ -1,0 +1,323 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Profile Detail
+{% endblock title %}
+
+
+{% block page_title %}
+    {{ request.user.username }} Profile Detail
+{% endblock page_title %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb m-0">
+        <li class="breadcrumb-item"><a href="{% url 'student-profile' %}">Profile</a></li>
+        <li class="breadcrumb-item active">
+            Profile Detail
+        </li>
+</ol>
+{% endblock breadcrumb %}
+
+
+{% block content %}
+    <div class="col-lg-10 m-auto">
+        <div class="checkout-tabs">
+            <div class="row">
+                <div class="col-xl-2 col-sm-3">
+                    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                        <a class="nav-link active" id="v-pills-personal-one-tab" data-toggle="pill" href="#v-pills-personal-one" role="tab" aria-controls="v-pills-personal-one" aria-selected="true">
+                            <i class= "bx bx-user d-block check-nav-icon mt-4 mb-2"></i>
+                            <p class="font-weight-bold mb-4">Personal Information (1)</p>
+                        </a>
+                        <a class="nav-link" id="v-pills-personal-two-tab" data-toggle="pill" href="#v-pills-personal-two" role="tab" aria-controls="v-pills-personal-two" aria-selected="false"> 
+                            <i class= "bx bx-user d-block check-nav-icon mt-4 mb-2"></i>
+                            <p class="font-weight-bold mb-4">Personal Information (2) </p>
+                        </a>
+                        <a class="nav-link" id="v-pills-relative-tab" data-toggle="pill" href="#v-pills-relative" role="tab" aria-controls="v-pills-relative" aria-selected="false">
+                            <i class= "fas fa-handshake d-block check-nav-icon mt-4 mb-2"></i>
+                            <p class="font-weight-bold mb-4">Relative Information</p>
+                        </a>
+                        <a class="nav-link" id="v-pills-account-tab" data-toggle="pill" href="#v-pills-account" role="tab" aria-controls="v-pills-account" aria-selected="false">
+                            <i class= "bx bx-lock d-block check-nav-icon mt-4 mb-2"></i>
+                            <p class="font-weight-bold mb-4">Account Information</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-xl-10 col-sm-9">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="tab-content" id="v-pills-tabContent">
+                                <div class="tab-pane fade show active" id="v-pills-personal-one" role="tabpanel" aria-labelledby="v-pills-personal-one-tab">
+                                    <div>
+                                        <h4 class="card-title">Personal Information (1)</h4>
+                                        <p class="card-title-desc">
+                                            This datas comes from your kankor form, so you are not able to directly manipulate them.
+                                        </p>
+                                        <hr>
+                                        <div class="row my-2">
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="">Kankor ID</label>
+                                                    <input type="text" value="{{user.student.kankor_id}}" class="form-control font-size-15" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="">First Name</label>
+                                                    <input type="text" value="{{user.student.first_name}}" class="form-control font-size-15" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="">Last Name</label>
+                                                    <input type="text" value="{{user.student.last_name}}" class="form-control font-size-15" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="">Father Name</label>
+                                                    <input type="text" value="{{user.student.father_name}}" class="form-control font-size-15" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="">Grand Father Name</label>
+                                                    <input type="text" value="{{user.student.grand_father_name}}" class="form-control font-size-15" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="">School</label>
+                                                    <input type="text" value="{{user.student.school_name}}" class="form-control font-size-15" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="">Score</label>
+                                                    <input type="text" value="{{user.student.score}}" class="form-control font-size-15" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="">Department</label>
+                                                    <input type="text" value="{{user.student.result}}" class="form-control font-size-15" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="">Province</label>
+                                                    <input type="text" value="{{user.student.province}}" class="form-control font-size-15" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="">Gender</label>
+                                                    <input type="text" value="{{user.student.gender}}" class="form-control font-size-15" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="">Semester</label>
+                                                    <input type="text" value="{{user.student.semester}}" class="form-control font-size-15" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="">Section</label>
+                                                    <input type="text" value="{{user.student.section}}" class="form-control font-size-15" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="">Kankor Exam Date</label>
+                                                    <input value="{{user.student.kankor_exam_date}}" class="form-control font-size-15" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="v-pills-personal-two" role="tabpanel" aria-labelledby="v-pills-personal-two-tab">
+                                    <div>
+                                        <h4 class="card-title">Personal Information (2)</h4>
+                                        <p class="card-title-desc">
+                                            Fill the following fields correctly
+                                        </p>
+                                        <form action="" method="POST" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        
+                                        <div class="row my-2">
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="">National Cart Type</label>
+                                                    {% render_field p_form.cart class="form-control font-size-15" %}
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="">National Number</label>
+                                                    {% render_field p_form.cart_number class="form-control font-size-15" placeholder="123456" %}
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="">Page Number</label>
+                                                    {% render_field p_form.page_number class="form-control font-size-15" placeholder="43" %}
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="">Register Number</label>
+                                                    {% render_field p_form.register_number class="form-control font-size-15" placeholder="43" %}
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="">Volume Number</label>
+                                                    {% render_field p_form.volume class="form-control font-size-15" placeholder="43" %}
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="">Cart Image</label>
+                                                    {% render_field p_form.cart_photo class="form-control font-size-15" type="file" %}
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="">Hostle</label>
+                                                    {% render_field p_form.hostle class="form-control font-size-15"  %}
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="">Wing Number</label>
+                                                    {% render_field p_form.wing_number class="form-control font-size-15" placeholder="13" %}
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="">Room Number</label>
+                                                    {% render_field p_form.room_number class="form-control font-size-15" placeholder="123" %}
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="">Birth Year</label>
+                                                    {% render_field p_form.dob class="form-control font-size-15" type="date" %}
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="">Graduation Year From School</label>
+                                                    {% render_field p_form.graduation_date_school class="form-control font-size-15" type="date" %}
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    
+                                            <label> Topics</label>
+                                                    {% render_field p_form.interests class="form-control font-size-15" %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                     </div>
+                                </div>
+                                <div class="tab-pane fade" id="v-pills-relative" role="tabpanel" aria-labelledby="v-pills-relative-tab">
+                                    <div class="card shadow-none mb-0">
+                                        <div class="card-body">
+                                            <h4 class="card-title mb-2">
+                                                Relative Information
+                                            </h4>
+                                            <p> Being in touch with student's family is very helpful in student's productivity </p>
+                                            <hr>
+                                            <div class="row my-2">
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="basicpill-kankod_id-input" class="farsi"> Relation </label>
+                                                        {% render_field p_form.rel_with_std class="form-control font-size-15" placeholder="برادر" %}
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="basicpill-kankod_id-input" class="farsi"> Name </label>
+                                                        {% render_field p_form.name class="form-control font-size-15" placeholder="احمد" %}
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="basicpill-kankod_id-input" class="farsi"> Occupation </label>
+                                                        {% render_field p_form.job class="form-control font-size-15" placeholder='انجنیر' %}
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="basicpill-kankod_id-input" class="farsi"> Phone Number </label>
+                                                        {% render_field p_form.phone1 class="form-control font-size-15" placeholder="0093777276256" %}
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="basicpill-kankod_id-input" class="farsi"> Phone Number 2 </label>
+                                                        {% render_field p_form.phone2 class="form-control font-size-15" placeholder="0093798010461" %}
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="basicpill-kankod_id-input" class="farsi"> Address </label>
+                                                        {% render_field p_form.address class="form-control font-size-15" placeholder="کابل" %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="v-pills-account" role="tabpanel" aria-labelledby="v-pills-account-tab">
+                                    <div class="card shadow-none mb-0">
+                                        <div class="card-body">
+                                            <h4 class="card-title mb-2">Account Information</h4>
+                                            <p> Using safe and strong authentication fields protects your account from accedential and antentional issues. </p>
+                                            <hr>
+                                            <div class="row my-2">
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="basicpill-kankod_id-input" class="farsi"> Avatar </label>
+                                                        {% render_field p_form.avatar class="form-control font-size-15" type="file" %}
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="basicpill-kankod_id-input" class="farsi"> Email Address </label>
+                                                        {% render_field u_form.email class="form-control font-size-15" type="email" %}
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="basicpill-kankod_id-input" class="farsi"> Username </label>
+                                                        {% render_field u_form.username class="form-control font-size-15" %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-primary font-size-18">Save</button>
+                                        </div>
+                                    </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-sm-6">
+                            <a href="{% url 'student-profile' %}" class="btn text-muted d-none d-sm-inline-block btn-link">
+                                <i class="mdi mdi-arrow-left mr-1"></i> Back to Profile Page </a>
+                        </div> <!-- end col -->
+                        
+                    </div> <!-- end row -->
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+    </div>
+{% endblock content %}
