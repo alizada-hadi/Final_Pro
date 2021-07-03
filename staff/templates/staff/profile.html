@@ -3,7 +3,7 @@
 {% load widget_tweaks %}
 
 {% block title %}
-    Student Profile
+    Staff Profile
 {% endblock title %}
 
 
@@ -13,7 +13,7 @@
 
 {% block breadcrumb %}
 <ol class="breadcrumb m-0">
-        <li class="breadcrumb-item"><a href="">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
         <li class="breadcrumb-item active">
             Profile
         </li>
@@ -31,7 +31,7 @@
                         <div class="row">
                             <div class="col-7">
                                 <div class="text-primary p-3">
-                                    <h5 class="text-primary">Welcome Back !</h5>
+                                    <h5 class="text-primary">Welcome {{ request.user.username.title }} !</h5>
                                     <p>To Kabul University, CSFMIS</p>
                                 </div>
                             </div>
@@ -44,15 +44,15 @@
                         <div class="row">
                             <div class="col-sm-4">
                                 <div class="avatar-md profile-user-wid mb-4">
-                                    {% if request.user.student.avatar %}
-                                    <img src="{{ request.user.student.avatar.url }}" alt="" class="img-thumbnail rounded-circle">
+                                    {% if request.user.staff.avatar %}
+                                    <img src="{{ request.user.staff.avatar.url }}" alt="" class="img-thumbnail rounded-circle">
                                     {% else %}
                                     <img src="{% static 'assets/images/users/avatar-1.jpg' %}" alt="" class="img-thumbnail rounded-circle">
                                     {% endif %}
                                 </div>
                                 <h5 class="font-size-15 text-truncate">{{ request.user.username.title }}</h5>
                                 <p class="text-muted mb-0 text-truncate">
-                                    {{ request.user.student.result }}
+                                    {{ request.user.staff.department }}
                                 </p>
                             </div>
 
@@ -61,17 +61,15 @@
                                    
                                     <div class="row">
                                         <div class="col-6">
-                                            <h5 class="font-size-15"> {{ request.user.student.semester }} </h5>
-                                            <p class="text-muted mb-0">Semester</p>
+                                            <h5 class="font-size-15"> 3 </h5>
+                                            <p class="text-muted mb-0">Courses</p>
                                         </div>
                                         <div class="col-6">
                                             <h5 class="font-size-15">0</h5>
                                             <p class="text-muted mb-0">Passed Credits</p>
                                         </div>
                                     </div>
-                                    <div class="mt-4">
-                                        <a style="float: right;" href="{% url 'student-profile-complete' %}" class="btn btn-primary waves-effect waves-light btn-sm">Profile Detail <i class="mdi mdi-arrow-right ml-1"></i></a>
-                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -90,12 +88,12 @@
                                     <tr>
                                         <th scope="row">Full Name :</th>
                                         <td>
-                                            {{ request.user.student.first_name }} - {{ request.user.student.last_name }}
+                                            {{ request.user.staff.first_name }} - {{ request.user.staff.last_name }}
                                         </td>
                                     </tr>
                                     <tr>
                                         <th scope="row">Department :</th>
-                                        <td> {{ request.user.student.result }} </td>
+                                        <td> {{ request.user.staff.department }} </td>
                                     </tr>
                                     <tr>
                                         <th scope="row">E-mail :</th>
@@ -103,7 +101,7 @@
                                     </tr>
                                     <tr>
                                         <th scope="row">Address :</th>
-                                        <td>{{ request.user.student.address }}</td>
+                                        <td>{{ request.user.staff.address }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -114,39 +112,14 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title mb-5">Interesting Topics</h4>
-                        <div class="">
-                            {% for category in categories %}
-                    <ul class="verti-timeline list-unstyled my-2">
-                        <li class="event-list active">
-                            <div class="event-timeline-dot">
-                                <i class="bx bx-right-arrow-circle bx-fade-right" dir="rtl"></i>
-                            </div>
-                            <div class="media">
-                                <div class="mr-3">
-                                    <i class="bx bx-server h4 text-primary" dir="rtl"></i>
-                                </div>
-                                <div class="media-body">
-                                    <div>
-                                        <h5 class="font-size-15"><a href="#" class="text-dark">
-                                            {{ category }}
-                                        </a>
-                                       {% for i in user.student.interests.all %}
-                                            {% if i.category == category %}
-                                                <ul>
-                                                    <li> {{ i }} </li>
-                                                </ul>
-                                            {% endif %}
-                                       {% endfor %}
-                                    </h5>
-                                       
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                    {% endfor %}
-                        </div>
+                        <h4 class="card-title mb-2">Detail Information</h4>
+                       <a href="{% url 'staff-profile-detail' %}" class="btn btn-default font-size-15" style="color: blue;">Complete Your Profile Info</a>
+                       <a href="" class="btn btn-default font-size-15" style="color: blue;">
+                        Your Education Background
+                    </a>
+                    <a href="" class="btn btn-default font-size-15" style="color: blue;">
+                        Your Job Experience
+                    </a>
                     </div>
                 </div>  
                 <!-- end card -->

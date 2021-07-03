@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Staff Register
+{% endblock title %}
+
+
+{% block page_title %}
+    Register New Staff
+{% endblock page_title %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb m-0">
+        <li class="breadcrumb-item"><a href="{% url 'staff-list' %}">Staff List</a></li>
+        <li class="breadcrumb-item active">
+            New Staff
+        </li>
+</ol>
+{% endblock breadcrumb %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-10 m-auto">
+        <div class="card">
+            <div class="card-body">
+
+                <h4 class="card-title">
+                    Register New Staff
+                </h4>
+                <hr>
+
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row my-2">
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label for="">Staff ID</label>
+                                {% render_field form.staff_id class="form-control" placeholder="1029292" %}
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label for="">First Name</label>
+                                {% render_field form.first_name class="form-control" placeholder="محمد" %}
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label for="">Last Name</label>
+                                {% render_field form.last_name class="form-control" placeholder="محمدی" %}
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label for="">Father Name</label>
+                                {% render_field form.father_name class="form-control" placeholder="کریم" %}
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label for="">Department</label>
+                                {% render_field form.department class="form-control"  %}
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label for="">Gender</label>
+                                {% render_field form.gender class="form-control"  %}
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <h5 class="mb-2">Student Account Information</h5>
+                    <div class="row my-2">
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label for="">Email</label>
+                                {% render_field form.email class="form-control" placeholder="ahmad@gmail.com"  %}
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label for="">Username</label>
+                                {% render_field form.username class="form-control" placeholder="Ahmad"  %}
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label for="">Password</label>
+                                {% render_field form.password1 type="password" class="form-control" placeholder="**********"  %}
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label for="">Retype Password</label>
+                                {% render_field form.password2 class="form-control" type="password" placeholder="**********"  %}
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary font-size-18">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

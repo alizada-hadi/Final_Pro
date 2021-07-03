@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Staff List
+{% endblock title %}
+
+
+{% block page_title %}
+    Staff List
+{% endblock page_title %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb m-0">
+        <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+        <li class="breadcrumb-item active">
+            Staff List
+        </li>
+</ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-10 m-auto">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="row mb-3">
+                    <div class="col-lg-6">
+                        <h2 class="card-title">Staff List</h2>
+                    </div>
+                    <div class="col-lg-6">
+                        <a style="float: right;" href="{% url 'staff-register' %}" class="btn btn-primary font-size-15">Register New Staff</a>
+                    </div>
+                </div>
+                <table id="datatable"
+                    class="table table-bordered dt-responsive nowrap"
+                    style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Full Name</th>
+                            <th>Father Name</th>
+                            <th>Gender</th>
+                            <th>Department</th>
+                            <th>Status</th>
+                            <th>Image</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for staff in staffs %}
+                          <tr>
+                              <td>{{ forloop.counter }}</td>
+                              <td> {{ staff.first_name }} - {{ staff.last_name }} </td>
+                              <td> {{ staff.father_name }} </td>
+                              <td> {{ staff.gender }} </td>
+                              <td> {{ staff.department }} </td>
+                              <td> {{ staff.status }} </td>
+                              <td> 
+                            <img src="{{ staff.avatar.url }}" alt="" class="rounded-circle avatar-sm">
+                            </td>
+                            <td>
+                                <button class="btn btn-primary font-size-16 ">
+                                    <i class="bx bx-dots-horizontal"></i>
+                                </button>
+                            </td>
+                          </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div> <!-- end col -->
+</div> 
+{% endblock content %}

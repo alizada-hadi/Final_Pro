@@ -9,7 +9,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("", views.index, name="index"),
     path("", include("departments.urls")),
-    path("", include("students.urls"))
+    path("", include("students.urls")),
+    path("", include("staff.urls")),
+    path("", include("accounts.urls"))
 ]
 
 if DEBUG:

@@ -1,14 +1,15 @@
 from django.shortcuts import render, redirect
 from django.views.generic import (
-    CreateView
+    CreateView,
+    ListView
 )
 from .forms import StudentSignUpForm, UserUpdateForm, UserProfileUpdateForm
 from accounts.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from .decorators import student_required
 from django.contrib.auth.decorators import login_required
-from .models import Category
+from .models import Category, Student
 
 
 class StudentSignUpView(LoginRequiredMixin, CreateView):
@@ -25,22 +26,19 @@ class StudentSignUpView(LoginRequiredMixin, CreateView):
         return redirect('/')
 
 
-def login_view(request):
-    if request.method == "POST":
-        email = request.POST.get("email")
-        password = request.POST.get("password")
-        user = authenticate(request, email=email, password=password)
-        if user is not None:
-            if user.is_student == True:
-                login(request, user)
-                return redirect("student-profile")
-    return render(request, "Authentication/main.html")
-
-
 @login_required
 @student_required
 def student_profile(request):
-    return render(request, "students/profile.html")
+    categories = Category.objects.all()
+    u_form = UserUpdateForm(request.POST, instance=request.user)
+    p_form = UserProfileUpdateForm(
+        request.POST, request.FILES, instance=request.user.student)
+    context = {
+        'u_form': u_form,
+        'p_form': p_form,
+        'categories': categories
+    }
+    return render(request, "students/profile.html", context)
 
 
 @login_required
@@ -64,3 +62,15 @@ def student_profile_completion(request):
         "categories": category
     }
     return render(request, "students/profile_complete.html", context)
+
+
+@login_required
+def logoutPage(request):
+    logout(request)
+    return redirect("login")
+
+
+class StudentListView(LoginRequiredMixin, ListView):
+    model = Student
+    context_object_name = 'students'
+    template_name = "students/student_list.html"
