@@ -1,0 +1,290 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    {% if curriculum %}
+        {{ curriculum.curr_name }} Courses
+    {% else %}
+    All Courses
+    {% endif %}
+{% endblock title %}
+
+
+{% block page_title %}
+        {% if curriculum %}
+        {{ curriculum.curr_name }} Courses
+        {% else %}
+        All Courses
+        {% endif %}
+{% endblock page_title %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb m-0">
+        <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+        <li class="breadcrumb-item active">
+            Courses
+        </li>
+</ol>
+{% endblock breadcrumb %}
+
+
+{% block content %}
+<style>
+    .module{
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+    }
+</style>
+    <div class="d-xl-flex">
+        <div class="w-100">
+            <div class="d-md-flex">
+                <div class="card filemanager-sidebar mr-md-2">
+                    <div class="card-body">
+    
+                        <div class="d-flex flex-column h-100">
+                            <div class="mb-4">
+                                <div class="mb-3">
+                                    <div class="dropdown">
+                                        <h4>
+                                            {% if curriculum %}
+                                                {{ curriculum.curr_name }} Courses
+                                            {% else %}
+                                            All Courses
+                                            {% endif %}
+                                        </h4>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div  {% if not subject %} class="selected card border mb-2" {% endif %}>
+                                <a href="{% url 'all-courses' %}" class="text-body">
+                                    <div class="p-2">
+                                        <div class="d-flex">
+                                            <div class="avatar-xs align-self-center mr-2">
+                                                <div class="avatar-title rounded bg-transparent text-success font-size-20">
+                                                    <i class="mdi mdi-image"></i>
+                                                </div>
+                                            </div>
+
+                                            <div class="overflow-hidden mr-auto">
+                                                <h5 class="font-size-13 text-truncate mb-1"> All Course </h5>
+                                                
+                                            </div>
+
+                                            <div class="ml-2">
+                                                <p class="text-muted"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            {% for c in curriculums %}
+                            <div  {% if curriculum == c %} class="selected card border mb-2 module"{% endif %}>
+                                <a href="{% url 'course-list-curriculum' c.slug %}" class="text-body">
+                                    <div class="p-2">
+                                        <div class="d-flex">
+                                            <div class="avatar-xs align-self-center mr-2">
+                                                <div class="avatar-title rounded bg-transparent text-success font-size-20">
+                                                    <i class="mdi mdi-image"></i>
+                                                </div>
+                                            </div>
+
+                                            <div class="overflow-hidden mr-auto">
+                                                <h5 class="font-size-13 text-truncate mb-1"> {{ c.curr_name }} </h5>
+                                                <p class="text-muted text-truncate mb-0">{{ c.total_courses }}</p>
+                                            </div>
+
+                                            <div class="ml-2">
+                                                <p class="text-muted"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            {% endfor %}
+                            
+                        </div>
+    
+                    </div>
+                </div>
+                <!-- filemanager-leftsidebar -->
+    
+                <div class="w-100">
+                    <div class="card">
+                        <div class="card-body">
+                            <div>
+                                <div class="row mb-3">
+                                    <div class="col-xl-3 col-sm-6">
+                                        <div class="mt-2">
+                                            <h5></h5>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-9 col-sm-6">
+                                        <form class="mt-4 mt-sm-0 float-sm-right form-inline">
+                                            <div class="search-box mb-2 mr-2">
+                                                <div class="position-relative">
+                                                    <input type="text" class="form-control bg-light border-light rounded" placeholder="Search...">
+                                                    <i class="bx bx-search-alt search-icon"></i>
+                                                </div>
+                                            </div>
+    
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="mb-4">
+                            <div>
+                                <div class="">
+                                    {% for course in courses %}
+                                    {% with curriculum=course.curriculum %}
+                                    <h3> 
+                                        <a href="{% url 'course_detail' course.slug %}">
+                                            {{ course.title }}
+                                        </a>    
+                                    </h3>
+                                    <p> 
+                                        <a href="{% url 'course-list-curriculum' curriculum.slug %}"> {{ curriculum }} </a>. {{ course.total_modules }} modules. Instructor : {{ course.owner.username }}
+                                    </p>
+                                    {% endwith %}
+                                    
+                                    {% endfor %}
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end card -->
+                </div>
+                <!-- end w-100 -->
+            </div>
+        </div>
+    
+        <div class="card filemanager-sidebar ml-lg-2">
+            <div class="card-body">
+                <div class="text-center">
+                    <h5 class="font-size-15 mb-4">Storage</h5>
+                    <div class="apex-charts" id="radial-chart"></div>
+    
+                    <p class="text-muted mt-4">48.02 GB (76%) of 64 GB used</p>
+                </div>
+    
+                <div class="mt-4">
+                    <div class="card border shadow-none mb-2">
+                        <a href="javascript: void(0);" class="text-body">
+                            <div class="p-2">
+                                <div class="d-flex">
+                                    <div class="avatar-xs align-self-center mr-2">
+                                        <div class="avatar-title rounded bg-transparent text-success font-size-20">
+                                            <i class="mdi mdi-image"></i>
+                                        </div>
+                                    </div>
+    
+                                    <div class="overflow-hidden mr-auto">
+                                        <h5 class="font-size-13 text-truncate mb-1">Images</h5>
+                                        <p class="text-muted text-truncate mb-0">176 Files</p>
+                                    </div>
+    
+                                    <div class="ml-2">
+                                        <p class="text-muted">6 GB</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+    
+                    <div class="card border shadow-none mb-2">
+                        <a href="javascript: void(0);" class="text-body">
+                            <div class="p-2">
+                                <div class="d-flex">
+                                    <div class="avatar-xs align-self-center mr-2">
+                                        <div class="avatar-title rounded bg-transparent text-danger font-size-20">
+                                            <i class="mdi mdi-play-circle-outline"></i>
+                                        </div>
+                                    </div>
+    
+                                    <div class="overflow-hidden mr-auto">
+                                        <h5 class="font-size-13 text-truncate mb-1">Video</h5>
+                                        <p class="text-muted text-truncate mb-0">45 Files</p>
+                                    </div>
+    
+                                    <div class="ml-2">
+                                        <p class="text-muted">4.1 GB</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+    
+                    <div class="card border shadow-none mb-2">
+                        <a href="javascript: void(0);" class="text-body">
+                            <div class="p-2">
+                                <div class="d-flex">
+                                    <div class="avatar-xs align-self-center mr-2">
+                                        <div class="avatar-title rounded bg-transparent text-info font-size-20">
+                                            <i class="mdi mdi-music"></i>
+                                        </div>
+                                    </div>
+    
+                                    <div class="overflow-hidden mr-auto">
+                                        <h5 class="font-size-13 text-truncate mb-1">Music</h5>
+                                        <p class="text-muted text-truncate mb-0">21 Files</p>
+                                    </div>
+    
+                                    <div class="ml-2">
+                                        <p class="text-muted">3.2 GB</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+    
+                    <div class="card border shadow-none mb-2">
+                        <a href="javascript: void(0);" class="text-body">
+                            <div class="p-2">
+                                <div class="d-flex">
+                                    <div class="avatar-xs align-self-center mr-2">
+                                        <div class="avatar-title rounded bg-transparent text-primary font-size-20">
+                                            <i class="mdi mdi-file-document"></i>
+                                        </div>
+                                    </div>
+    
+                                    <div class="overflow-hidden mr-auto">
+                                        <h5 class="font-size-13 text-truncate mb-1">Document</h5>
+                                        <p class="text-muted text-truncate mb-0">21 Files</p>
+                                    </div>
+    
+                                    <div class="ml-2">
+                                        <p class="text-muted">2 GB</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+    
+                    <div class="card border shadow-none">
+                        <a href="javascript: void(0);" class="text-body">
+                            <div class="p-2">
+                                <div class="d-flex">
+                                    <div class="avatar-xs align-self-center mr-2">
+                                        <div class="avatar-title rounded bg-transparent text-warning font-size-20">
+                                            <i class="mdi mdi-folder"></i>
+                                        </div>
+                                    </div>
+    
+                                    <div class="overflow-hidden mr-auto">
+                                        <h5 class="font-size-13 text-truncate mb-1">Others</h5>
+                                        <p class="text-muted text-truncate mb-0">20 Files</p>
+                                    </div>
+    
+                                    <div class="ml-2">
+                                        <p class="text-muted">1.4 GB</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

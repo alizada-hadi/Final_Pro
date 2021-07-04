@@ -1,0 +1,266 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Module {{ module.order|add:1 }}
+{% endblock title %}
+
+
+{% block page_title %}
+    Module {{ module.order|add:1 }}: {{ module.title }}
+{% endblock page_title %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb m-0">
+        <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+        <li class="breadcrumb-item active">
+            Courses
+        </li>
+</ol>
+{% endblock breadcrumb %}
+
+
+{% block content %}
+<style>
+    .module{
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+    }
+</style>
+    {% with course=module.course %}
+    <div class="d-xl-flex">
+        <div class="w-100">
+            <div class="d-md-flex">
+                <div class="card filemanager-sidebar mr-md-2">
+                    <div class="card-body">
+    
+                        <div class="d-flex flex-column h-100">
+                            <div class="mb-4">
+                                <div class="mb-3">
+                                    <div class="dropdown">
+                                        <h4>{{ course.title }}</h4>
+                                    </div>
+                                </div> 
+                            </div>
+                            {% for m in course.modules.all %}
+                            <div  data-id="{{ m.id }}" {% if m == module %}
+                            class="selected card border mb-2 module"{% endif %}>
+                                <a href="{% url 'module_content_list' m.id %}" class="text-body">
+                                    <div class="p-2">
+                                        <div class="d-flex">
+                                            <div class="avatar-xs align-self-center mr-2">
+                                                <div class="avatar-title rounded bg-transparent text-success font-size-20">
+                                                    <i class="mdi mdi-image"></i>
+                                                </div>
+                                            </div>
+
+                                            <div class="overflow-hidden mr-auto">
+                                                <h5 class="font-size-13 text-truncate mb-1">Module {{ m.order|add:1 }}</h5>
+                                                <p class="text-muted text-truncate mb-0">{{ m.title }}</p>
+                                            </div>
+
+                                            <div class="ml-2">
+                                                <p class="text-muted"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            {% empty %}
+                            <p class="alert alert-info text-center">
+                                No Module Yet
+                            </p>
+                            {% endfor %}
+                            <a href="{% url 'course-moudle-update' course.pk %}">Update Module</a>
+                        </div>
+    
+                    </div>
+                </div>
+                <!-- filemanager-leftsidebar -->
+    
+                <div class="w-100">
+                    <div class="card">
+                        <div class="card-body">
+                            <div>
+                                <div class="row mb-3">
+                                    <div class="col-xl-3 col-sm-6">
+                                        <div class="mt-2">
+                                            <h5>Module {{ module.order|add:1 }}: {{ module.title }}</h5>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-9 col-sm-6">
+                                        <form class="mt-4 mt-sm-0 float-sm-right form-inline">
+                                            <div class="search-box mb-2 mr-2">
+                                                <div class="position-relative">
+                                                    <input type="text" class="form-control bg-light border-light rounded" placeholder="Search...">
+                                                    <i class="bx bx-search-alt search-icon"></i>
+                                                </div>
+                                            </div>
+    
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="mb-4">
+                            <div>
+                                <div class="">
+                                    {% for content in module.contents.all %}
+                                    {% with item=content.item %}
+                                    <h3> {{ item.title.title }} </h3>
+                                    <p> {{ item.render }} </p>
+
+                                    <form action="{% url 'content-delete' content.id %}" method="POST">
+                                        {% csrf_token %}
+                                        <button class="btn btn-default font-size-15">
+                                            <i class="fa fa-trash" style="color: red;"></i>
+                                        </button>
+                                       
+                                    </form>
+                                    <hr>
+                                    {% endwith %}
+                                    {% empty %}
+                                    <p class="font-size-16 alert alert-info text-center">
+                                        This module has no content yet.
+                                    </p>
+                                    {% endfor %}
+                                    <hr>
+                                    <a href="{% url 'module-content-create' module.id "text" %}" class="font-size-16"> Add New Content </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="card filemanager-sidebar ml-lg-2">
+            <div class="card-body">
+                <div class="text-center">
+                    <h5 class="font-size-15 mb-4">Storage</h5>
+                    <div class="apex-charts" id="radial-chart"></div>
+    
+                    <p class="text-muted mt-4">48.02 GB (76%) of 64 GB used</p>
+                </div>
+    
+                <div class="mt-4">
+                    <div class="card border shadow-none mb-2">
+                        <a href="javascript: void(0);" class="text-body">
+                            <div class="p-2">
+                                <div class="d-flex">
+                                    <div class="avatar-xs align-self-center mr-2">
+                                        <div class="avatar-title rounded bg-transparent text-success font-size-20">
+                                            <i class="mdi mdi-image"></i>
+                                        </div>
+                                    </div>
+    
+                                    <div class="overflow-hidden mr-auto">
+                                        <h5 class="font-size-13 text-truncate mb-1">Images</h5>
+                                        <p class="text-muted text-truncate mb-0">176 Files</p>
+                                    </div>
+    
+                                    <div class="ml-2">
+                                        <p class="text-muted">6 GB</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+    
+                    <div class="card border shadow-none mb-2">
+                        <a href="javascript: void(0);" class="text-body">
+                            <div class="p-2">
+                                <div class="d-flex">
+                                    <div class="avatar-xs align-self-center mr-2">
+                                        <div class="avatar-title rounded bg-transparent text-danger font-size-20">
+                                            <i class="mdi mdi-play-circle-outline"></i>
+                                        </div>
+                                    </div>
+    
+                                    <div class="overflow-hidden mr-auto">
+                                        <h5 class="font-size-13 text-truncate mb-1">Video</h5>
+                                        <p class="text-muted text-truncate mb-0">45 Files</p>
+                                    </div>
+    
+                                    <div class="ml-2">
+                                        <p class="text-muted">4.1 GB</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+    
+                    <div class="card border shadow-none mb-2">
+                        <a href="javascript: void(0);" class="text-body">
+                            <div class="p-2">
+                                <div class="d-flex">
+                                    <div class="avatar-xs align-self-center mr-2">
+                                        <div class="avatar-title rounded bg-transparent text-info font-size-20">
+                                            <i class="mdi mdi-music"></i>
+                                        </div>
+                                    </div>
+    
+                                    <div class="overflow-hidden mr-auto">
+                                        <h5 class="font-size-13 text-truncate mb-1">Music</h5>
+                                        <p class="text-muted text-truncate mb-0">21 Files</p>
+                                    </div>
+    
+                                    <div class="ml-2">
+                                        <p class="text-muted">3.2 GB</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+    
+                    <div class="card border shadow-none mb-2">
+                        <a href="javascript: void(0);" class="text-body">
+                            <div class="p-2">
+                                <div class="d-flex">
+                                    <div class="avatar-xs align-self-center mr-2">
+                                        <div class="avatar-title rounded bg-transparent text-primary font-size-20">
+                                            <i class="mdi mdi-file-document"></i>
+                                        </div>
+                                    </div>
+    
+                                    <div class="overflow-hidden mr-auto">
+                                        <h5 class="font-size-13 text-truncate mb-1">Document</h5>
+                                        <p class="text-muted text-truncate mb-0">21 Files</p>
+                                    </div>
+    
+                                    <div class="ml-2">
+                                        <p class="text-muted">2 GB</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+    
+                    <div class="card border shadow-none">
+                        <a href="javascript: void(0);" class="text-body">
+                            <div class="p-2">
+                                <div class="d-flex">
+                                    <div class="avatar-xs align-self-center mr-2">
+                                        <div class="avatar-title rounded bg-transparent text-warning font-size-20">
+                                            <i class="mdi mdi-folder"></i>
+                                        </div>
+                                    </div>
+    
+                                    <div class="overflow-hidden mr-auto">
+                                        <h5 class="font-size-13 text-truncate mb-1">Others</h5>
+                                        <p class="text-muted text-truncate mb-0">20 Files</p>
+                                    </div>
+    
+                                    <div class="ml-2">
+                                        <p class="text-muted">1.4 GB</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endwith %}
+{% endblock content %}

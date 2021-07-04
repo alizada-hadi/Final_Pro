@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Delete Course  
+{% endblock title %}
+
+
+{% block page_title %}
+        Delete "{{ object.title }}"
+    
+{% endblock page_title %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb m-0">
+        <li class="breadcrumb-item"><a href="{% url 'course-list' %}">Course List</a></li>
+        <li class="breadcrumb-item active">
+            {{ object.title }}
+        </li>
+</ol>
+{% endblock breadcrumb %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-10 m-auto">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">
+                   {{ object.title }}
+                </h4>
+                <hr>
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <p class="alert alert-danger font-size-20 text-center">
+                        Are you sure you want to delete the {{ object.title }} course?
+
+                    </p>
+                    <button class="btn btn-danger font-size-18" type="submit">Yes, Delete</button>
+                    <a href="{% url 'course-list' %}" class="btn btn-primary font-size-18">No, Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

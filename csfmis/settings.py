@@ -42,11 +42,13 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'widget_tweaks',
+    'crispy_forms',
     # custom apps
     "accounts.apps.AccountsConfig",
     "departments.apps.DepartmentsConfig",
     "students.apps.StudentsConfig",
     "staff.apps.StaffConfig",
+    "courses.apps.CoursesConfig",
 ]
 
 MIDDLEWARE = [
@@ -142,6 +144,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 # Default primary key field type

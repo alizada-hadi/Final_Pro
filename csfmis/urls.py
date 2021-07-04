@@ -11,7 +11,9 @@ urlpatterns = [
     path("", include("departments.urls")),
     path("", include("students.urls")),
     path("", include("staff.urls")),
-    path("", include("accounts.urls"))
+    path("", include("accounts.urls")),
+    path("", include("courses.urls")),
+    path('ckeditor/', include("ckeditor_uploader.urls")),
 ]
 
 if DEBUG:
