@@ -1,6 +1,14 @@
 from django.contrib import admin
 from django.db import models
-from .models import Course, Module
+from .models import Course, Module, Session
+
+
+@admin.register(Session)
+class SessionAdmin(admin.ModelAdmin):
+    list_display = (
+        "session",
+        "session_type",
+    )
 
 
 class ModuleInline(admin.StackedInline):

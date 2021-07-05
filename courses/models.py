@@ -7,6 +7,21 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from .fields import OrderField
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
+from students.models import Student
+from django.utils import timezone
+
+
+class Session(models.Model):
+    SESSION_TYPE = (
+        ("spring", "spring"),
+        ("fall", "fall"),
+    )
+    session = models.DateField(default=timezone.now)
+    session_type = models.CharField(
+        max_length=20, choices=SESSION_TYPE, default="spring")
+
+    def __str__(self):
+        return f"{self.session_type} {self.session}"
 
 
 class Course(models.Model):
@@ -14,6 +29,10 @@ class Course(models.Model):
         User, related_name="courses_created", on_delete=models.CASCADE)
     curriculum = models.ForeignKey(
         Curriculum, related_name="courses", on_delete=models.CASCADE)
+    course_session = models.ForeignKey(
+        Session, on_delete=models.CASCADE)
+    students = models.ManyToManyField(
+        Student, related_name="courses_joined", blank=True)
     code = models.CharField(max_length=200, unique=True)
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True)
@@ -84,16 +103,16 @@ class ItemBase(models.Model):
 
 
 class Text(ItemBase):
-    content = RichTextUploadingField()
+    content = RichTextUploadingField(blank=True)
 
 
 class File(ItemBase):
-    content = RichTextUploadingField()
+    content = RichTextUploadingField(blank=True)
 
 
 class Image(ItemBase):
-    content = RichTextUploadingField()
+    content = RichTextUploadingField(blank=True)
 
 
 class Video(ItemBase):
-    content = RichTextUploadingField()
+    content = RichTextUploadingField(blank=True)

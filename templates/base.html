@@ -261,7 +261,7 @@
                             <li class="menu-title" key="t-menu">Menu</li>
                             <li>
                                 <a href="javascript: void(0);" class="waves-effect">
-                                    <i class="bx bx-home-circle"></i><span class="badge badge-pill badge-info float-right">04</span>
+                                    <i class="bx bx-home-circle"></i>
                                     <span key="t-dashboards">Dashboards</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
@@ -284,12 +284,25 @@
                                         <span key="t-calendar">Students</span>
                                     </a>
                                 </li>
+                                {% if request.user.is_student == True %}
+                                <li>
+                                    <a href="javascript: void(0);" class="waves-effect">
+                                        <i class="bx bx-home-circle"></i>
+                                        <span key="t-dashboards">Courses</span>
+                                    </a>
+                                    <ul class="sub-menu" aria-expanded="false">
+                                        <li><a href="{% url 'all-courses' %}" key="t-default">All Courses</a></li>
+                                        <li><a href="{% url 'student-course-list' %}" key="t-saas">My Courses</a></li>
+                                    </ul>
+                                </li>
+                                {% elif request.user.is_staff == True %}
                                 <li>
                                     <a href="{% url 'course-list' %}" class="waves-effect">
                                         <i class="bx bx-buildings"></i>
                                         <span key="t-calendar">Courses</span>
                                     </a>
                                 </li>
+                                {% endif %}
                             <li>
                                 <a href="{% url 'department-list' %}" class="waves-effect">
                                     <i class="bx bx-buildings"></i>

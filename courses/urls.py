@@ -25,4 +25,5 @@ urlpatterns = [
     path("curriculum/<slug:curriculum>/",
          views.CourseListView.as_view(), name="course-list-curriculum"),
     path("<slug:slug>/", views.CourseDetailView.as_view(), name="course_detail"),
+    path("course/join/<slug:slug>/", views.join_course_view, name="join-to-course")
 ]

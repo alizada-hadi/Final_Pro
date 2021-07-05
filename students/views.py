@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.views.generic import (
     CreateView,
-    ListView
+    ListView,
+    DetailView
 )
 from .forms import StudentSignUpForm, UserUpdateForm, UserProfileUpdateForm
 from accounts.models import User
@@ -10,6 +11,7 @@ from django.contrib.auth import authenticate, login, logout
 from .decorators import student_required
 from django.contrib.auth.decorators import login_required
 from .models import Category, Student
+from courses.models import Course
 
 
 class StudentSignUpView(LoginRequiredMixin, CreateView):
@@ -74,3 +76,32 @@ class StudentListView(LoginRequiredMixin, ListView):
     model = Student
     context_object_name = 'students'
     template_name = "students/student_list.html"
+
+
+class StudentCourseListView(LoginRequiredMixin, ListView):
+    model = Course
+    template_name = "students/course/list.html"
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(students__in=[self.request.user.student])
+
+
+class StudentCourseDetailView(LoginRequiredMixin, DetailView):
+    model = Course
+    template_name = "students/course/detail.html"
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(students__in=[self.request.user.student])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        course = self.get_object()
+        if "module_id" in self.kwargs:
+            context['module'] = course.modules.get(
+                id=self.kwargs['module_id']
+            )
+        else:
+            context['module'] = course.modules.all()[0]
+        return context

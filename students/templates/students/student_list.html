@@ -64,7 +64,11 @@
                             <td> {{ student.semester }} </td>
                             <td> {{ student.status }} </td>
                             <td>
+                                {% if request.user.student.avatar %}
                                 <img src="{{ student.avatar.url }}" class="rounded-circle avatar-sm" alt="">
+                                {% else %}
+                                <img src="{% static 'assets/images/users/avatar-1.jpg' %}" class="rounded-circle avatar-sm" alt="">
+                                {% endif %}
                             </td>
                             <td>
                                 <button class="btn btn-primary font-size-15 ">

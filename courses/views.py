@@ -19,6 +19,8 @@ from django.forms.models import modelform_factory
 from django.apps import apps
 from departments.models import Curriculum
 from django.db.models import Count
+from django.contrib.auth.decorators import login_required
+from students.decorators import student_required
 # mixins for course views
 
 
@@ -36,7 +38,7 @@ class OwnerEditMixin(object):
 
 class OwnerCourseMixin(OwnerMixin, LoginRequiredMixin, PermissionRequiredMixin):
     model = Course
-    fields = ["curriculum", "code", "title", "overview"]
+    fields = ["curriculum", "code", "course_session", "title", "overview"]
     success_url = reverse_lazy("/")
 
 
@@ -169,7 +171,9 @@ class CourseListView(TemplateResponseMixin, View):
     template_name = "courses/course/list.html"
 
     def get(self, request, curriculum=None):
-        curriculums = Curriculum.objects.annotate(
+        curriculums = Curriculum.objects.filter(
+            curr_semester=request.user.student.semester
+        ).annotate(
             total_courses=Count("courses")
         )
         courses = Course.objects.annotate(
@@ -183,10 +187,22 @@ class CourseListView(TemplateResponseMixin, View):
         return self.render_to_response({
             "curriculums": curriculums,
             "curriculum": curriculum,
-            "courses": courses
+            "courses": courses,
         })
 
 
-class CourseDetailView(DeleteView):
+class CourseDetailView(DetailView):
     model = Course
     template_name = "courses/course/detail.html"
+
+
+@login_required
+@student_required
+def join_course_view(request, slug):
+    course = Course.objects.get(slug=slug)
+    if request.method == "POST":
+        code = request.POST.get("join_code")
+        if code == course.code:
+            course.students.add(request.user.student)
+        return redirect("student-course-list")
+    return render(request, "courses/join.html")

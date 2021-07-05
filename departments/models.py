@@ -44,7 +44,8 @@ class Curriculum(models.Model):
         ('Secondary', 'Secondary'),
     )
 
-    department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    department = models.ForeignKey(
+        Department, related_name="department", on_delete=models.CASCADE)
     curr_code = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(max_length=200, unique=True)
     curr = models.CharField(

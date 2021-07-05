@@ -3,27 +3,19 @@
 {% load widget_tweaks %}
 
 {% block title %}
-    {% if curriculum %}
-        {{ curriculum.curr_name }} Courses
-    {% else %}
-    All Courses
-    {% endif %}
+    {{ object.title }}
 {% endblock title %}
 
 
 {% block page_title %}
-        {% if curriculum %}
-        {{ curriculum.curr_name }} Courses
-        {% else %}
-        All Courses
-        {% endif %}
+   {{ object.title }} Course
 {% endblock page_title %}
 
 {% block breadcrumb %}
 <ol class="breadcrumb m-0">
-        <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'student-course-list' %}">My Courses</a></li>
         <li class="breadcrumb-item active">
-            Courses
+            {{ object.title }}
         </li>
 </ol>
 {% endblock breadcrumb %}
@@ -36,6 +28,7 @@
         transition: 0.3s;
     }
 </style>
+    {% with course=module.course %}
     <div class="d-xl-flex">
         <div class="w-100">
             <div class="d-md-flex">
@@ -46,18 +39,14 @@
                             <div class="mb-4">
                                 <div class="mb-3">
                                     <div class="dropdown">
-                                        <h4>
-                                            {% if curriculum %}
-                                                {{ curriculum.curr_name }} Courses
-                                            {% else %}
-                                            All Courses
-                                            {% endif %}
-                                        </h4>
+                                        <h4>{{ course.title }}</h4>
                                     </div>
                                 </div> 
                             </div>
-                            <div  {% if not subject %} class="selected card border mb-2" {% endif %}>
-                                <a href="{% url 'all-courses' %}" class="text-body">
+                            {% for m in course.modules.all %}
+                            <div  data-id="{{ m.id }}" {% if m == module %}
+                            class="selected card border mb-2 module"{% endif %}>
+                                <a href="{% url 'student-course-detail-module' object.id m.id %}" class="text-body">
                                     <div class="p-2">
                                         <div class="d-flex">
                                             <div class="avatar-xs align-self-center mr-2">
@@ -67,8 +56,8 @@
                                             </div>
 
                                             <div class="overflow-hidden mr-auto">
-                                                <h5 class="font-size-13 text-truncate mb-1"> All Course </h5>
-                                                
+                                                <h5 class="font-size-13 text-truncate mb-1">Module {{ m.order|add:1 }}</h5>
+                                                <p class="text-muted text-truncate mb-0">{{ m.title }}</p>
                                             </div>
 
                                             <div class="ml-2">
@@ -78,32 +67,12 @@
                                     </div>
                                 </a>
                             </div>
-                            {% for c in curriculums %}
-                            {% if c.department.dep_name == request.user.student.result.dep_name and c.curr_semester == request.user.student.semester %}
-                            <div  {% if curriculum == c %} class="selected card border mb-2 module"{% endif %}>
-                                <a href="{% url 'course-list-curriculum' c.slug %}" class="text-body">
-                                    <div class="p-2">
-                                        <div class="d-flex">
-                                            <div class="avatar-xs align-self-center mr-2">
-                                                <div class="avatar-title rounded bg-transparent text-success font-size-20">
-                                                    <i class="mdi mdi-image"></i>
-                                                </div>
-                                            </div>
-
-                                            <div class="overflow-hidden mr-auto">
-                                                <h5 class="font-size-13 text-truncate mb-1"> {{ c.curr_name }} </h5>
-                                                <p class="text-muted text-truncate mb-0">{{ c.total_courses }}</p>
-                                            </div>
-
-                                            <div class="ml-2">
-                                                <p class="text-muted"></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            {% endif %}
-                            {% endfor %} 
+                            {% empty %}
+                            <p class="alert alert-info text-center">
+                                No Module Yet
+                            </p>
+                            {% endfor %}
+                            
                         </div>
     
                     </div>
@@ -117,7 +86,7 @@
                                 <div class="row mb-3">
                                     <div class="col-xl-3 col-sm-6">
                                         <div class="mt-2">
-                                            <h5></h5>
+                                            <h5>Module {{ module.order|add:1 }}: {{ module.title }}</h5>
                                         </div>
                                     </div>
                                     <div class="col-xl-9 col-sm-6">
@@ -136,27 +105,25 @@
                             <hr class="mb-4">
                             <div>
                                 <div class="">
-                                    {% for course in courses %}
-                                    {% with curriculum=course.curriculum %}
-                                    <h3> 
-                                        <a href="{% url 'course_detail' course.slug %}">
-                                            {{ course.title }}
-                                        </a>    
-                                    </h3>
-                                    <p> 
-                                        <a href="{% url 'course-list-curriculum' curriculum.slug %}"> {{ curriculum }} </a>. {{ course.total_modules }} modules. Instructor : {{ course.owner.username }}
-                                    </p>
-                                    {% endwith %}
+                                    {% for content in module.contents.all %}
+                                    {% with item=content.item %}
+                                    <h3> {{ item.title.title }} </h3>
+                                    <p> {{ item.render }} </p>
+
                                     
+                                    <hr>
+                                    {% endwith %}
+                                    {% empty %}
+                                    <p class="font-size-16 alert alert-info text-center">
+                                        This module has no content yet.
+                                    </p>
                                     {% endfor %}
                                     
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- end card -->
                 </div>
-                <!-- end w-100 -->
             </div>
         </div>
     
@@ -288,4 +255,5 @@
             </div>
         </div>
     </div>
+    {% endwith %}
 {% endblock content %}
