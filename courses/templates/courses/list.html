@@ -88,6 +88,7 @@
                                                             {% if course.modules.count > 0 %}
                                                                 <a class="dropdown-item" href="{% url 'module_content_list'  course.modules.first.id %}">Manage Content</a>
                                                             {% endif %}
+                                                            <a class="dropdown-item" href="{%  url 'create-result' course.pk %}">Manage Score</a>
                                                             <div class="dropdown-divider"></div>
                                                             <a class="dropdown-item" href="{% url 'course-delete' course.pk %}" style="color: red;">Remove Course</a>
                                                         </div>

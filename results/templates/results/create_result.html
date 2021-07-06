@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Create Result
+{% endblock title %}
+
+
+{% block page_title %}
+    Create Result
+{% endblock page_title %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb m-0">
+        <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+        <li class="breadcrumb-item active">
+            Create Result
+        </li>
+</ol>
+{% endblock breadcrumb %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-10 m-auto">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">
+                    Create Result
+                </h4>
+                <hr>
+                <form method="POST">
+                    {% csrf_token %}
+                  <div class="card-header mb-2">
+                    <h3 class="card-title">
+                      <input type="submit" class="btn btn-primary font-size-18" value="Next >">
+                    </h3>
+                  </div>
+                </form>
+                <table id="datatable"
+                    class="table table-bordered dt-responsive nowrap"
+                    style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>
+                               #
+                            </th>
+                            <th>Full Name</th>
+                            <th>Father Name </th>
+                            <th>Course</th>
+                            <th>Course Session</th>
+                            <!-- <th>Course Session</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in all_students %}
+                        <tr>
+                            <td>
+                                {{ forloop.counter }}
+                            </td>
+                            <td> {{ student.first_name }} - {{ student.last_name }} </td>
+                            <td> {{ student.father_name }} </td>
+                            <td>{{ course.title }}</td>
+                            <td> {{ course.course_session }} </td>
+                        </tr>
+                        {% empty %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <form method="POST">
+                    {% csrf_token %}
+                  <div class="card-header mt-2">
+                    <h3 class="card-title">
+                      <input type="submit" class="btn btn-primary font-size-18" value="Next >">
+                    </h3>
+                  </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#selecter").change(function () {
+    if (this.checked) {
+      $('input[name="students"]').prop('checked', true);
+    }
+    else {
+      $('input[name="students"]').prop('checked', false);
+    }
+  });
+</script>
+
+{% endblock content %}
