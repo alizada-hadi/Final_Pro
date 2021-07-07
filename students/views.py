@@ -1,3 +1,4 @@
+from django.http import request
 from django.shortcuts import render, redirect
 from django.views.generic import (
     CreateView,
@@ -12,6 +13,7 @@ from .decorators import student_required
 from django.contrib.auth.decorators import login_required
 from .models import Category, Student
 from courses.models import Course
+from staff.decorators import staff_required
 
 
 class StudentSignUpView(LoginRequiredMixin, CreateView):
@@ -105,3 +107,33 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
         else:
             context['module'] = course.modules.all()[0]
         return context
+
+
+@login_required
+@staff_required
+def student_detail_view(request, pk):
+    student = Student.objects.get(pk=pk)
+    semesters = [[], [], [], [], [], [], [], []]
+    for r in student.result_set.all():
+        if r.course.curriculum.curr_semester == "First":
+            semesters[0].append(r)
+        elif r.course.curriculu.curr_semester == "Second":
+            semesters[1].append(r)
+        elif r.course.curriculu.curr_semester == "Thrid":
+            semesters[1].append(r)
+        elif r.course.curriculu.curr_semester == "Fourth":
+            semesters[1].append(r)
+        elif r.course.curriculu.curr_semester == "Fifth":
+            semesters[1].append(r)
+        elif r.course.curriculu.curr_semester == "Sixth":
+            semesters[1].append(r)
+        elif r.course.curriculu.curr_semester == "Seventh":
+            semesters[1].append(r)
+        elif r.course.curriculu.curr_semester == "Eighth":
+            semesters[1].append(r)
+
+    context = {
+        'student': student,
+        "semesters": semesters
+    }
+    return render(request, "students/student_detail.html", context)

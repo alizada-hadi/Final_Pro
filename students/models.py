@@ -43,7 +43,7 @@ class Student(models.Model):
     grand_father_name = models.CharField(max_length=200)
     school_name = models.CharField(max_length=200)
     score = models.IntegerField(default=300)
-    result = models.ForeignKey(Department, on_delete=models.CASCADE)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
     province = models.CharField(max_length=200)
     gender = models.CharField(max_length=20, default="male")
     semester = models.CharField(

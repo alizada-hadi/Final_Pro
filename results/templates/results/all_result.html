@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    View Result
+{% endblock title %}
+
+
+{% block page_title %}
+    View Result
+{% endblock page_title %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb m-0">
+        <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+        <li class="breadcrumb-item active">
+            View Result
+        </li>
+</ol>
+{% endblock breadcrumb %}
+
+
+{% block content %}
+
+<div class="col-lg-10 m-auto" dir="rtl">
+    <div class="row">
+        <div class="col-lg-12" dir="rtl">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title" dir="rtl" style="float: right;">جدول نمرات</h4>
+                   
+                    <div class="table-responsive">
+                        <table class="table mb-0">
+    
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>نام</th>
+                                    <th>نام پدر</th>
+                                    <th>مضمون</th>
+                                    <th>۲۰ فیصد</th>
+                                    <th>نهایی</th>
+                                    <th>مجموع</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for result in results %}
+                                    <tr>
+                                        <td> {{ forloop.counter }} </td>
+                                        <td> {{ result.student.first_name }} </td>
+                                        <td> {{ result.student.father_name }} </td>
+                                        <td> {{ result.course }} </td>
+                                        <td> {{ result.mid_term_exam }} </td>
+                                        <td> {{ result.total }} </td>
+                                        <td> {{ result.total_score }} </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <hr class="my-2">
+                        <button class="btn btn-primary font-size-18" style="float: right;">
+                            <i class="fa fa-download"></i>
+                        </button>
+                    </div>
+    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

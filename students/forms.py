@@ -8,16 +8,30 @@ from departments.models import Department
 
 
 class StudentSignUpForm(UserCreationForm):
+    SEMESTER = (
+        ("First", "First"),
+        ("Second", "Second"),
+        ("Third", "Third"),
+        ("Fourth", "Fourth"),
+        ("Fifth", "Fifth"),
+        ("Sixth", "Sixth"),
+        ("Seventh", "Seventh"),
+        ("Eighth", "Eighth"),
+    )
+    GENDER = (
+        ('Male', 'male'),
+        ('Female', 'female'),
+    )
     kankor_id = forms.CharField(max_length=200, required=True)
     first_name = forms.CharField(max_length=200, required=True)
     father_name = forms.CharField(max_length=200, required=True)
     grand_father_name = forms.CharField(max_length=200, required=True)
     school_name = forms.CharField(max_length=200, required=True)
     score = forms.IntegerField(required=True)
-    result = forms.ModelChoiceField(queryset=Department.objects.all())
+    department = forms.ModelChoiceField(queryset=Department.objects.all())
     province = forms.CharField(max_length=200, required=True)
-    gender = forms.CharField(max_length=20, required=True)
-    semester = forms.CharField(max_length=20, required=True)
+    gender = forms.ChoiceField(choices=GENDER)
+    semester = forms.ChoiceField(choices=SEMESTER)
     section = forms.CharField(max_length=20, required=True)
     last_name = forms.CharField(max_length=200, required=True)
     kankor_exam_date = forms.DateField()
@@ -36,7 +50,7 @@ class StudentSignUpForm(UserCreationForm):
         grand_father_name = cleaned_data.get("grand_father_name")
         school_name = cleaned_data.get("school_name")
         score = cleaned_data.get("score")
-        result = cleaned_data.get("result")
+        department = cleaned_data.get("department")
         province = cleaned_data.get("province")
         gender = cleaned_data.get("gender")
         semester = cleaned_data.get("semester")
@@ -57,7 +71,7 @@ class StudentSignUpForm(UserCreationForm):
             grand_father_name=grand_father_name,
             school_name=school_name,
             score=score,
-            result=result,
+            department=department,
             province=province,
             gender=gender,
             semester=semester,

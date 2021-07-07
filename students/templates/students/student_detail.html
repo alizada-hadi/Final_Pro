@@ -1,0 +1,272 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    {{ student.user.username }} Detail Info
+{% endblock title %}
+
+
+{% block page_title %}
+    {{ student.first_name }} - {{ student.last_name }}
+{% endblock page_title %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb m-0">
+        <li class="breadcrumb-item"><a href="{% url 'student-list' %}">Student List</a></li>
+        <li class="breadcrumb-item active">
+            {{ student.user.username }}'s Detail
+        </li>
+</ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+
+<div class="col-lg-10 m-auto">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+
+                <h4 class="card-title mb-4">Student Detail Info</h4>
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-pills nav-justified" role="tablist">
+                    <li class="nav-item waves-effect waves-light">
+                        <a class="nav-link active" data-toggle="tab" href="#home-1" role="tab">
+                            <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                            <span class="d-none d-sm-block">Personal Info</span> 
+                        </a>
+                    </li>
+                    <li class="nav-item waves-effect waves-light">
+                        <a class="nav-link" data-toggle="tab" href="#profile-1" role="tab">
+                            <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
+                            <span class="d-none d-sm-block">{{ student.user.username }}'s {{ student.semester }} Semester Result </span> 
+                        </a>
+                    </li>
+                    <li class="nav-item waves-effect waves-light">
+                        <a class="nav-link" data-toggle="tab" href="#messages-1" role="tab">
+                            <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
+                            <span class="d-none d-sm-block">{{ student.user.username }}'s Final Result </span>   
+                        </a>
+                    </li>
+                    <li class="nav-item waves-effect waves-light">
+                        <a class="nav-link" data-toggle="tab" href="#settings-1" role="tab">
+                            <span class="d-block d-sm-none"><i class="fas fa-cog"></i></span>
+                            <span class="d-none d-sm-block">General Report</span>    
+                        </a>
+                    </li>
+                </ul>
+                <hr>
+
+                <!-- Tab panes -->
+                <div class="tab-content p-3 text-muted">
+                    <div class="tab-pane active" id="home-1" role="tabpanel">
+                        <p class="mb-0">
+                            Raw denim you probably haven't heard of them jean shorts Austin.
+                            Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache
+                            cliche tempor, williamsburg carles vegan helvetica. Reprehenderit
+                            butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi,
+                            qui irure terry richardson ex squid. Aliquip placeat salvia cillum
+                            iphone. Seitan aliquip quis cardigan american apparel, butcher
+                            voluptate nisi qui.
+                        </p>
+                    </div>
+                    <div class="tab-pane" id="profile-1" role="tabpanel">
+                        <h4 class="my-2"> <b> {{ student.user.username }}'s </b> <b> {{ student.semester }} </b> Semester Result </h4>
+                        <div class="border-bottom"></div>
+                        <div class="table-responsive">
+                            <table class="table mb-0 mt-3">
+        
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>نام کورس</th>
+                                        <th>استاد</th>
+                                        <th>کریدیت</th>
+                                        <th>نمره ۲۰ فیصد</th>
+                                        <th>نمره پروژه</th>
+                                        <th>نمره کارخانگی</th>
+                                        <th>نمره فعالیت صنفی</th>
+                                        <th>نمره نهایی</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                      {% for result in student.result_set.all %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ result.course }}</td>
+                                            <td>{{ result.course.owner.staff.first_name }} - {{ result.course.owner.staff.last_name }} </td>
+                                            <td class="font-size-16">
+                                                <span class="badge badge-pill badge-primary p-2">
+                                                    {{ result.course.curriculum.curr_credit }}
+                                                </span>
+                                            </td>
+                                            <td class="font-size-16"> {{ result.mid_term_exam }} </td>
+                                            <td class="font-size-16"> {{ result.project_score }} </td>
+                                            <td class="font-size-16"> {{ result.home_work_score }} </td>
+                                            <td class="font-size-16"> {{ result.class_activity_score }} </td>
+                                            <td class="font-size-16"> {{ result.final_exam }} </td>
+                                            
+                                        </tr>
+                                      {% endfor %}
+                                    
+                                </tbody>
+                            </table>
+                            <hr class="my-2">
+                            <h5>Total Score : </h5>
+                            <h5>Completed Credits : </h5>
+                            <h5>Percentage : </h5>
+                            <h5>Passed : <span class="badge badge-info badge-pill p-2 font-size-15">Yes</span> </h5>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="messages-1" role="tabpanel">
+                        <div class="row mt-2 mx-2">
+                            <div class="col-lg-4">
+                                <img src="{% static 'assets/images/logo/tahsilat.jpeg' %}" alt="" class="avatar-xl">
+                            </div>
+                            <div class="col-lg-4">
+                                <p class="text-center font-size-16">Islamic Republic of Afghanistan
+                                <br class="">
+                                Ministry of Higher Education 
+                                <br>
+                                <span class="mt-2">Kabul University Computer Science Faculty</span>   
+                                </p>
+                            </div>
+                            <div class="col-lg-4">
+                                <img style="float: right;" src="{% static 'assets/images/logo/kabul2.png' %}" alt="" class="avatar-xl">
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row mt-3">
+                            <div class="col-lg-2">
+                                {% if student.avatar %}
+                                <img src="{{ student.avatar.url }}" alt="" style="height: 180px; width: 170px;">
+                                {% else %}
+                                <img src="{% static 'assets/images/users/avatar-7.jpg' %}" alt="" class="avatar-xl" style="height: 180px; width: 170px;">
+                                {% endif %}
+                            </div>
+                            <div class="col-lg-3">
+                                <table style="float: left;">
+                                    <tr>
+                                        <th style="width: 60%;"> Student ID : </th>
+                                        <td> {{ student.kankor_id }} </td>
+                                    </tr>
+                                    <tr>
+                                        <th>First Name : </th>
+                                        <td> {{ student.first_name }} </td>
+                                    </tr>
+                                    <tr>
+                                        <th> Last Name : </th>
+                                        <td> {{ student.last_name }} </td>
+                                    </tr>
+                                    <tr>
+                                        <th> Father Name : </th>
+                                        <td> {{ student.father_name }} </td>
+                                    </tr>
+                                    <tr>
+                                        <th> National ID : </th>
+                                        <td> {{ student.cart_number }} </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-lg-3">
+                                <table>
+                                    <tr>
+                                        <th style="width: 50%;">
+                                        Birth Year : 
+                                        </th>
+                                        <td> {{ student.dob }} </td>
+                                    </tr>
+                                    <tr>
+                                        <th> Faculty : </th>
+                                        <td> Computer Science </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Department : </th>
+                                        <td> {{ student.department }} </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Education : </th>
+                                        <td>Bachelor</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-lg-3">
+                                <table>
+                                    <tr>
+                                        <th style="width: 50%;"> Total Credit : </th>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Passed Credit  : </th>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Percentage : </th>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Start Year : </th>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Graduation Year : </th>
+                                        <td></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row mt-3">
+                            {% for sem in semesters %}
+                            <div class="col-lg-4">
+                                <div style="border: 1px solid black; min-height: 250px;" class="my-1">
+                                    <div class="title" style="background-color: lightblue;">
+                                        <p class="px-1 pt-1 farsi font-size-15">Semester - {{ forloop.counter }} </p>
+                                    </div>
+                                    <table style="margin: 0; padding: 0; width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align: center;">Course Code</th>
+                                                <th style="text-align: center;">Course Name</th>
+                                                <th style="text-align: center;">  Credit </th>
+                                                
+                                                <th style="text-align: center;">Score</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for r in sem %}
+                                                <tr>
+                                                    <td class="text-center"> {{ r.course.curriculum.curr_code  }} </td>
+                                                    <td class="text-center"> {{ r.course.curriculum.curr_name }} </td>
+                                                    <td class="text-center"> {{ r.course.curriculum.curr_credit }} </td>
+                                                    <td class="text-center">
+                                                        {{ r.total_score }}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="settings-1" role="tabpanel">
+                        <p class="mb-0">
+                            Trust fund seitan letterpress, keytar raw denim keffiyeh etsy
+                            art party before they sold out master cleanse gluten-free squid
+                            scenester freegan cosby sweater. Fanny pack portland seitan DIY,
+                            art party locavore wolf cliche high life echo park Austin. Cred
+                            vinyl keffiyeh DIY salvia PBR, banh mi before they sold out
+                            farm-to-table.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

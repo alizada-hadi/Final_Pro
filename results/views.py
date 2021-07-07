@@ -21,20 +21,30 @@ def create_result(request, pk):
                 )
             )
         Result.objects.bulk_create(results)
-        return redirect("update-result")
+        return redirect("update-result", course.pk)
     return render(request, 'results/create_result.html', {
         "all_students": all_students,
         "course": course
     })
 
 
-def edit_result(request):
+def edit_result(request, pk):
+    course = Course.objects.get(pk=pk)
     if request.method == "POST":
         form = EditResults(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("/")
+            return redirect("update-result", course.pk)
     else:
-        results = Result.objects.all()
+        results = Result.objects.filter(course=course)
         form = EditResults(queryset=results)
     return render(request, "results/edit_result.html", {"formset": form})
+
+
+def all_result_view(request, pk):
+    course = Course.objects.get(pk=pk)
+    results = Result.objects.filter(course=course)
+    context = {
+        "results": results
+    }
+    return render(request, "results/all_result.html", context)

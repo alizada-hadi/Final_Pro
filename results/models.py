@@ -5,7 +5,7 @@ from courses.models import Course
 
 class Result(models.Model):
     student = models.ForeignKey(
-        Student, related_name="students", on_delete=models.CASCADE)
+        Student, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     mid_term_exam = models.IntegerField(default=0)
     final_exam = models.IntegerField(default=0)
@@ -16,8 +16,8 @@ class Result(models.Model):
     def __str__(self):
         return f"{self.student}'s {self.course} score "
 
-    class Meta:
-        ordering = ['course']
+    def total(self):
+        return self.final_exam + self.project_score + self.home_work_score + self.class_activity_score
 
     def total_score(self):
         return self.mid_term_exam + self.final_exam + self.project_score + self.home_work_score + self.class_activity_score

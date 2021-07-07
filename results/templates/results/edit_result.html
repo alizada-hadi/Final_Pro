@@ -38,13 +38,13 @@
                         <tr>
                           <th>#</th>
                           <th>Name</th>
+                          <th>Father Name</th>
                           <th>Mid Term Score</th>
+                          <th>Final Exam Score</th>
                           <th>Project Score</th>
                           <th>Home Work Score</th>
                           <th>Class Activity Score</th>
-                          <th>Final Exam Score</th>
                           <th>Total</th>
-                          <th>Delete</th>
                         </tr>
                       </thead>
                       <<tbody>
@@ -53,20 +53,24 @@
                           <tr>
                             <td>{{forloop.counter }}</td>
                             <td>{{form.instance.student }}</td>
+                            <td>{{form.instance.student.father_name }}</td>
                             <td style="width: 10%;">{{form.mid_term_exam | add_class:"form-control form-control-sm"}}</td>
                             <td style="width: 10%;">{{form.final_exam | add_class:"form-control form-control-sm"}}</td>
                             <td style="width: 10%;">{{form.project_score | add_class:"form-control form-control-sm"}}</td>
-                            <td style="width: 10%;">{{form.home_work_score | add_class:"form-control form-control-sm"}}</td>
-                            <td style="width: 10%;">{{form.class_activity_score | add_class:"form-control form-control-sm"}}</td>
-                            <td>{{form.instance.total_score}}</td>
-                            <td>{{form.DELETE}}</td>
+                            <td style="width: 15%;">{{form.home_work_score | add_class:"form-control form-control-sm"}}</td>
+                            <td style="width: 15%;">{{form.class_activity_score | add_class:"form-control form-control-sm"}}</td>
+                            <td style="width: 10%;">
+                              <span class="badge badge-primary badge-pill p-2">
+                                {{form.instance.total_score}}
+                              </span>
+                            </td>
                   
                           </tr>
                         {% endfor %}
                       </tbody>
                     </table>
-                  
-                    <input type="submit" class="btn btn-success" value="Save">
+                  <hr>
+                    <input type="submit" class="btn btn-primary font-size-18" value="Save">
                     </form>
             </div>
         </div>
