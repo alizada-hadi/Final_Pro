@@ -39,6 +39,7 @@ class Course(models.Model):
     overview = RichTextUploadingField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    visited_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         pass

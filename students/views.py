@@ -1,3 +1,4 @@
+import datetime
 from django.http import request
 from django.shortcuts import render, redirect
 from django.views.generic import (
@@ -14,6 +15,9 @@ from django.contrib.auth.decorators import login_required
 from .models import Category, Student
 from courses.models import Course
 from staff.decorators import staff_required
+from courses.models import Course
+
+from departments.models import Curriculum
 
 
 class StudentSignUpView(LoginRequiredMixin, CreateView):
@@ -34,13 +38,15 @@ class StudentSignUpView(LoginRequiredMixin, CreateView):
 @student_required
 def student_profile(request):
     categories = Category.objects.all()
+    courses = Course.objects.filter(students=request.user.student)
     u_form = UserUpdateForm(request.POST, instance=request.user)
     p_form = UserProfileUpdateForm(
         request.POST, request.FILES, instance=request.user.student)
     context = {
         'u_form': u_form,
         'p_form': p_form,
-        'categories': categories
+        'categories': categories,
+        "courses": courses
     }
     return render(request, "students/profile.html", context)
 
@@ -88,6 +94,18 @@ class StudentCourseListView(LoginRequiredMixin, ListView):
         qs = super().get_queryset()
         return qs.filter(students__in=[self.request.user.student])
 
+    def get_context_data(self, *args, **kwargs):
+        context = super(StudentCourseListView,
+                        self).get_context_data(*args, **kwargs)
+        context["items"] = Course.objects.filter(
+            visited_at=datetime.date.today())
+        context["subjects"] = Curriculum.objects.filter(
+            curr_semester=self.request.user.student.semester)
+        context["classmates"] = Student.objects.filter(
+            semester=self.request.user.student.semester, department=self.request.user.student.department)
+
+        return context
+
 
 class StudentCourseDetailView(LoginRequiredMixin, DetailView):
     model = Course
@@ -99,6 +117,7 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["today"] = datetime.date.today()
         course = self.get_object()
         if "module_id" in self.kwargs:
             context['module'] = course.modules.get(

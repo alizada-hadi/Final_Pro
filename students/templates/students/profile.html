@@ -22,7 +22,7 @@
 
 
 {% block content %}
-
+<script src="{% static 'assets/libs/jquery/jquery.min.js' %}"></script>
     <div class="col-lg-10 m-auto">
         <div class="row">
             <div class="col-xl-4">
@@ -52,7 +52,7 @@
                                 </div>
                                 <h5 class="font-size-15 text-truncate">{{ request.user.username.title }}</h5>
                                 <p class="text-muted mb-0 text-truncate">
-                                    {{ request.user.student.result }}
+                                    {{ request.user.student.department }}
                                 </p>
                             </div>
 
@@ -95,7 +95,7 @@
                                     </tr>
                                     <tr>
                                         <th scope="row">Department :</th>
-                                        <td> {{ request.user.student.result }} </td>
+                                        <td> {{ request.user.student.department }} </td>
                                     </tr>
                                     <tr>
                                         <th scope="row">E-mail :</th>
@@ -112,43 +112,7 @@
                 </div>
                 <!-- end card -->
 
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title mb-5">Interesting Topics</h4>
-                        <div class="">
-                            {% for category in categories %}
-                    <ul class="verti-timeline list-unstyled my-2">
-                        <li class="event-list active">
-                            <div class="event-timeline-dot">
-                                <i class="bx bx-right-arrow-circle bx-fade-right" dir="rtl"></i>
-                            </div>
-                            <div class="media">
-                                <div class="mr-3">
-                                    <i class="bx bx-server h4 text-primary" dir="rtl"></i>
-                                </div>
-                                <div class="media-body">
-                                    <div>
-                                        <h5 class="font-size-15"><a href="#" class="text-dark">
-                                            {{ category }}
-                                        </a>
-                                       {% for i in user.student.interests.all %}
-                                            {% if i.category == category %}
-                                                <ul>
-                                                    <li> {{ i }} </li>
-                                                </ul>
-                                            {% endif %}
-                                       {% endfor %}
-                                    </h5>
-                                       
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                    {% endfor %}
-                        </div>
-                    </div>
-                </div>  
+                
                 <!-- end card -->
             </div>         
             
@@ -210,84 +174,90 @@
                         </div>
                     </div>
                 </div>
-                <div class="card">
+                <!-- <div class="card">
                     <div class="card-body">
                         <h4 class="card-title mb-4">Revenue</h4>
                         <div id="revenue-chart" class="apex-charts"></div>
                     </div>
-                </div>
+                </div> -->
+                
 
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title mb-4">My Projects</h4>
+                        <h4 class="card-title mb-4">My Courses</h4>
                         <div class="table-responsive">
                             <table class="table table-nowrap table-hover mb-0">
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
-                                        <th scope="col">Projects</th>
-                                        <th scope="col">Start Date</th>
-                                        <th scope="col">Deadline</th>
-                                        <th scope="col">Budget</th>
+                                        <th scope="col">Course Name</th>
+                                        <th scope="col">Course Creation Date</th>
+                                        <th scope="col">Course Instructor</th>
+                                        <th scope="col">Last Visit</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Skote admin UI</td>
-                                        <td>2 Sep, 2019</td>
-                                        <td>20 Oct, 2019</td>
-                                        <td>$506</td>
-                                    </tr>
-
-                                    <tr>
-                                        <th scope="row">2</th>
-                                        <td>Skote admin Logo</td>
-                                        <td>1 Sep, 2019</td>
-                                        <td>2 Sep, 2019</td>
-                                        <td>$94</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">3</th>
-                                        <td>Redesign - Landing page</td>
-                                        <td>21 Sep, 2019</td>
-                                        <td>29 Sep, 2019</td>
-                                        <td>$156</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">4</th>
-                                        <td>App Landing UI</td>
-                                        <td>29 Sep, 2019</td>
-                                        <td>04 Oct, 2019</td>
-                                        <td>$122</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">5</th>
-                                        <td>Blog Template</td>
-                                        <td>05 Oct, 2019</td>
-                                        <td>16 Oct, 2019</td>
-                                        <td>$164</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">6</th>
-                                        <td>Redesign - Multipurpose Landing</td>
-                                        <td>17 Oct, 2019</td>
-                                        <td>05 Nov, 2019</td>
-                                        <td>$192</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">7</th>
-                                        <td>Logo Branding</td>
-                                        <td>04 Nov, 2019</td>
-                                        <td>05 Nov, 2019</td>
-                                        <td>$94</td>
-                                    </tr>
+                                    {% for course in courses %}
+                                        <tr class="clickable-row" data-href="{% url 'student-course-detail' course.pk %}">
+                                            <td>{{ forloop.counter }}</td>
+                                            <td> {{ course.title }} </td>
+                                            <td> {{ course.created_at|date:"Y M, d" }} </td>
+                                            <td> {{ course.owner.username }} </td>
+                                            <td> {{ course.visited_at|timesince }} ago </td>
+                                        </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title mb-5">Interesting Topics</h4>
+                        <div class="">
+                            {% for category in categories %}
+                    <ul class="verti-timeline list-unstyled my-2">
+                        <li class="event-list active">
+                            <div class="event-timeline-dot">
+                                <i class="bx bx-right-arrow-circle bx-fade-right" dir="rtl"></i>
+                            </div>
+                            <div class="media">
+                                <div class="mr-3">
+                                    <i class="bx bx-server h4 text-primary" dir="rtl"></i>
+                                </div>
+                                <div class="media-body">
+                                    <div>
+                                        <h5 class="font-size-15"><a href="#" class="text-dark">
+                                            {{ category }}
+                                        </a>
+                                       {% for i in user.student.interests.all %}
+                                            {% if i.category == category %}
+                                                <ul>
+                                                    <li> {{ i }} </li>
+                                                </ul>
+                                            {% endif %}
+                                       {% endfor %}
+                                    </h5>
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    {% endfor %}
+                        </div>
+                    </div>
+                </div>  
             </div>
         </div>
     </div>
+    <script>
+        (function ($) {
+          $('.clickable-row').css('cursor', 'pointer');
+          $(".clickable-row").click(function () {
+            window.location = $(this).data("href");
+          });
+        })(jQuery)
+    
+    </script>
 {% endblock content %}

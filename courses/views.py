@@ -1,3 +1,4 @@
+import datetime
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.base import TemplateResponseMixin,  View
@@ -179,6 +180,7 @@ class CourseListView(TemplateResponseMixin, View):
         courses = Course.objects.annotate(
             total_modules=Count("modules")
         )
+        today = datetime.date.today
 
         if curriculum:
             curriculum = get_object_or_404(Curriculum, slug=curriculum)
@@ -188,6 +190,7 @@ class CourseListView(TemplateResponseMixin, View):
             "curriculums": curriculums,
             "curriculum": curriculum,
             "courses": courses,
+            "today": today
         })
 
 
