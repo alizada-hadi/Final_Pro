@@ -15,9 +15,8 @@ from django.contrib.auth.decorators import login_required
 from .models import Category, Student
 from courses.models import Course
 from staff.decorators import staff_required
-from courses.models import Course
-
 from departments.models import Curriculum
+from results.models import Result
 
 
 class StudentSignUpView(LoginRequiredMixin, CreateView):
@@ -156,3 +155,82 @@ def student_detail_view(request, pk):
         "semesters": semesters
     }
     return render(request, "students/student_detail.html", context)
+
+
+@login_required
+@student_required
+def semester_report(request):
+    test_total = 0
+    project_total = 0
+    home_total = 0
+    class_total = 0
+    final_total = 0
+    total_credit = 0
+    percentage = 0
+    total_curriculum = 0
+    status = ""
+    results = Result.objects.filter(student=request.user.student)
+    for c in Curriculum.objects.all():
+        if c.curr_semester == request.user.student.semester and c.department == request.user.student.department:
+            total_curriculum += c.curr_credit
+    for r in results:
+        test_total += r.mid_term_exam
+        project_total += r.project_score
+        home_total += r.home_work_score
+        class_total += r.class_activity_score
+        final_total += r.final_exam
+        total_credit += r.course.curriculum.curr_credit
+        percentage += r.total() / len(results)
+
+    context = {
+        "results": results,
+        "test_total": test_total,
+        "project_total": project_total,
+        "home_total": home_total,
+        "class_total": class_total,
+        "final_total": final_total,
+        "total_credit": total_credit,
+        "total": test_total + project_total + home_total + class_total + final_total,
+        "percentage": percentage,
+        "total_curriculum": total_curriculum
+
+    }
+    return render(request, "students/semester_report.html", context)
+
+
+@login_required
+@student_required
+def general_report(request):
+    semesters = [[], [], [], [], [], [], [], []]
+    first_semester_total = 0
+    passed_credit = 0
+    percentage = 0
+    results = request.user.student.result_set.count()
+    for result in request.user.student.result_set.all():
+        first_semester_total += result.total()
+        passed_credit += result.course.curriculum.curr_credit
+        percentage += result.total() / results
+    for r in request.user.student.result_set.all():
+        if r.course.curriculum.curr_semester == "First":
+            semesters[0].append(r)
+        elif r.course.curriculum.curr_semester == "Second":
+            semesters[1].append(r)
+        elif r.course.curriculum.curr_semester == "Thrid":
+            semesters[1].append(r)
+        elif r.course.curriculum.curr_semester == "Fourth":
+            semesters[1].append(r)
+        elif r.course.curriculum.curr_semester == "Fifth":
+            semesters[1].append(r)
+        elif r.course.curriculum.curr_semester == "Sixth":
+            semesters[1].append(r)
+        elif r.course.curriculum.curr_semester == "Seventh":
+            semesters[1].append(r)
+        elif r.course.curriculum.curr_semester == "Eighth":
+            semesters[1].append(r)
+    context = {
+        "semesters": semesters,
+        "first_semester_total": first_semester_total,
+        "passed_credit": passed_credit,
+        "percentage": percentage
+    }
+    return render(request, "students/general_report.html", context)

@@ -19,5 +19,8 @@ urlpatterns = [
     path("student/course/<pk>/<module_id>/",
          views.StudentCourseDetailView.as_view(), name="student-course-detail-module"),
     path("students/detail/<int:pk>/",
-         views.student_detail_view, name="student-detail")
+         views.student_detail_view, name="student-detail"),
+
+    path('student/semester/report/', views.semester_report, name="semester-report"),
+    path("student/general/report/", views.general_report, name="general-report"),
 ]

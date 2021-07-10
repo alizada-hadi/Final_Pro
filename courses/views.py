@@ -22,7 +22,25 @@ from departments.models import Curriculum
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 from students.decorators import student_required
+from django.core.exceptions import PermissionDenied
 # mixins for course views
+
+
+class GroupRequiredMixin(object):
+    group_required = None
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            raise PermissionDenied
+        else:
+            user_groups = []
+
+            for group in request.user.groups.values_list("name", flat=True):
+                user_groups.append(group)
+            if len(set(user_groups).intersection(self.group_required)) <= 0:
+                raise PermissionDenied
+
+        return super(GroupRequiredMixin, self).dispatch(request, *args, **kwargs)
 
 
 class OwnerMixin(object):
@@ -37,7 +55,8 @@ class OwnerEditMixin(object):
         return super().form_valid(form)
 
 
-class OwnerCourseMixin(OwnerMixin, LoginRequiredMixin, PermissionRequiredMixin):
+class OwnerCourseMixin(OwnerMixin, LoginRequiredMixin, GroupRequiredMixin):
+    group_required = ["Instructor"]
     model = Course
     fields = ["curriculum", "code", "course_session", "title", "overview"]
     success_url = reverse_lazy("/")
@@ -49,22 +68,18 @@ class OwnerCourseEditMixin(OwnerCourseMixin, OwnerEditMixin):
 
 class ManageCourseListView(OwnerCourseMixin, ListView):
     template_name = 'courses/list.html'
-    permission_required = "courses.view_course"
 
 
 class CourseCreateView(OwnerCourseEditMixin, CreateView):
-    permission_required = "courses.add_course"
     success_url = reverse_lazy("course-list")
 
 
 class CourseUpdateView(OwnerCourseEditMixin, UpdateView):
-    permission_required = "courses.change_course"
     success_url = reverse_lazy("course-list")
 
 
 class CourseDeleteView(OwnerCourseEditMixin,  DeleteView):
     template_name = "courses/course_confirm_delete.html"
-    permission_required = "courses.delete_course"
     success_url = reverse_lazy("course-list")
 
 

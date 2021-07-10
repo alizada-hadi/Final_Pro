@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Result
+{% endblock title %}
+
+
+{% block page_title %}
+    {{ request.user.username }}'s {{ request.user.student.semester }} Semester Result
+{% endblock page_title %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb m-0">
+        <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+        <li class="breadcrumb-item active">
+            {{ request.user.student.semester }}'s Semester Result
+        </li>
+</ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+<div class="col-lg-10 m-auto">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+              {{request.user.student.first_name}} - {{ request.user.student.last_name }}
+            </div>
+            <div class="card-body">
+              <table class="table table-bordered table-sm">
+                <thead class="thead-light">
+                  <tr>
+                    <th>#</th>
+                    <th>Course</th>
+                    <th>20% Score</th>
+                    <th>Project Score</th>
+                    <th>Home Work Score</th>
+                    <th>Class Activity Score</th>
+                    <th>Final Score</th>
+                    <th>Total</th>
+                    <th>Credit</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for result in results %}
+                    <tr>
+                      <td>{{ forloop.counter }}</td>
+                      <td>{{ result.course }}</td>
+                      <td>{{ result.mid_term_exam }}</td>
+                      <td>{{ result.project_score }}</td>
+                      <td>{{ result.home_work_score }}</td>
+                      <td>{{ result.class_activity_score }}</td>
+                      <td>{{ result.final_exam }}</td>
+                        <td> {{ result.total }} </td>
+                      <td> {{ result.course.curriculum.curr_credit }} </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="2"></td>
+                    <td>{{ test_total }}</td>
+                    <td>{{ project_total }}</td>
+                    <td>{{ home_total }}</td>
+                    <td>{{ class_total }}</td>
+                    <td> {{ final_total }} </td>
+                    <td></td>
+                    <td>
+                        <span class="badge badge-pill badge-primary p-1">
+                            {{ total_credit }}
+                        </span>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            <span class="font-size-18">Total : </span> <span class="font-size-16"> {{ total }} </span>
+              <br>
+            <span class="font-size-18">Percentage : </span> <span class="font-size-16"> {{percentage}} % </span>
+            <br>
+            <span class="font-size-18">Required Credits : </span> <span class="font-size-16"> 
+                  {{ total_curriculum }}
+            </span>
+            <br>
+            <span class="font-size-18">Completed Credits : </span> <span class="font-size-16"> 
+                  {{ total_credit }}
+            </span>
+            <br>
+            <span class="font-size-18">Status : </span> <span class="font-size-16"> 
+                  <span class="badge badge-danger badge-pill">
+                      Failed
+                  </span>
+            </span>
+      
+      
+      
+            </div>
+          </div>
+    </div>
+</div>
+{% endblock content %}

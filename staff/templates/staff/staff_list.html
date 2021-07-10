@@ -61,7 +61,7 @@
                               <td> {{ staff.status }} </td>
                               <td> 
                             {% if request.user.staff.avatar %}
-                            <img src="{{ staff.avatar.url }}" alt="" class="rounded-circle avatar-sm">
+                            <img src="{{ request.user.staff.avatar.url }}" alt="" class="rounded-circle avatar-sm">
                             {% else %}
                                 <img src="{% static 'assets/images/users/avatar-2.jpg' %}" alt="" class="rounded-circle avatar-sm">
                             {% endif %}

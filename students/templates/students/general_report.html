@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    {{ student.user.username }}'s Transcript
+{% endblock title %}
+
+
+{% block page_title %}
+    {{ request.user.student.first_name }} - {{ request.user.student.last_name }}
+{% endblock page_title %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb m-0">
+        <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+        <li class="breadcrumb-item active">
+            {{ request.user.username }}'s Transcript
+        </li>
+</ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+
+<div class="col-lg-10 m-auto">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+
+                <h4 class="card-title mb-4">Student Detail Info</h4>
+                <hr>
+
+                <div class="tab-pane" id="messages-1" role="tabpanel">
+                    <div class="row mt-2 mx-2">
+                        <div class="col-lg-4">
+                            <img src="{% static 'assets/images/logo/tahsilat.jpeg' %}" alt="" class="avatar-xl">
+                        </div>
+                        <div class="col-lg-4">
+                            <p class="text-center font-size-16">Islamic Republic of Afghanistan
+                            <br class="">
+                            Ministry of Higher Education 
+                            <br>
+                            <span class="mt-2">Kabul University Computer Science Faculty</span>   
+                            </p>
+                        </div>
+                        <div class="col-lg-4">
+                            <img style="float: right;" src="{% static 'assets/images/logo/kabul2.png' %}" alt="" class="avatar-xl">
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row mt-3">
+                        <div class="col-lg-2">
+                            {% if request.user.student.avatar %}
+                            <img src="{{ request.user.student.avatar.url }}" alt="" style="height: 180px; width: 170px;">
+                            {% else %}
+                            <img src="{% static 'assets/images/users/avatar-7.jpg' %}" alt="" class="avatar-xl" style="height: 180px; width: 170px;">
+                            {% endif %}
+                        </div>
+                        <div class="col-lg-3">
+                            <table style="float: left;">
+                                <tr>
+                                    <th style="width: 60%;"> Student ID : </th>
+                                    <td> {{ request.user.student.kankor_id }} </td>
+                                </tr>
+                                <tr>
+                                    <th>First Name : </th>
+                                    <td> {{ request.user.student.first_name }} </td>
+                                </tr>
+                                <tr>
+                                    <th> Last Name : </th>
+                                    <td> {{ request.user.student.last_name }} </td>
+                                </tr>
+                                <tr>
+                                    <th> Father Name : </th>
+                                    <td> {{ request.user.student.father_name }} </td>
+                                </tr>
+                                <tr>
+                                    <th> National ID : </th>
+                                    <td> {{ request.user.student.cart_number }} </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-lg-3">
+                            <table>
+                                <tr>
+                                    <th style="width: 50%;">
+                                    Birth Year : 
+                                    </th>
+                                    <td> {{ request.user.student.dob }} </td>
+                                </tr>
+                                <tr>
+                                    <th> Faculty : </th>
+                                    <td> Computer Science </td>
+                                </tr>
+                                <tr>
+                                    <th>Department : </th>
+                                    <td> {{ request.user.student.department }} </td>
+                                </tr>
+                                <tr>
+                                    <th>Education : </th>
+                                    <td>Bachelor</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-lg-3">
+                            <table>
+                                <tr>
+                                    <th style="width: 50%;"> Total Credit : </th>
+                                    <td>160</td>
+                                </tr>
+                                <tr>
+                                    <th>Passed Credit  : </th>
+                                    <td>{{ passed_credit }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Percentage :  </th>
+                                    <td>{{  percentage }} %</td>
+                                </tr>
+                                <tr>
+                                    <th>Start Year :  </th>
+                                    <td>{{ request.user.date_joined|date:"Y" }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Graduation Year : </th>
+                                    <td>"</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row mt-3">
+                        {% for sem in semesters %}
+                        <div class="col-lg-4">
+                            <div style="border: 1px solid black; min-height: 250px;" class="my-1">
+                                <div class="title" style="background-color: lightblue;">
+                                    <p class="px-1 pt-1 farsi font-size-15">Semester - {{ forloop.counter }} </p>
+                                </div>
+                                <table class="table table-bordered table-sm" style="margin: 0; padding: 0; width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align: center;">Course Code</th>
+                                            <th style="text-align: center;">Course Name</th>
+                                            <th style="text-align: center;">  Credit </th>
+                                            
+                                            <th style="text-align: center;">Score</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for r in sem %}
+                                            <tr>
+                                                <td class="text-center"> {{ r.course.curriculum.curr_code  }} </td>
+                                                <td class="text-center"> {{ r.course.curriculum.curr_name }} </td>
+                                                <td class="text-center"> {{ r.course.curriculum.curr_credit }} </td>
+                                                <td class="text-center">
+                                                    {{ r.total_score }}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                      
+                                    </tfoot>
+                                </table>
+                                
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -17,7 +17,7 @@ class Result(models.Model):
         return f"{self.student}'s {self.course} score "
 
     def total(self):
-        return self.final_exam + self.project_score + self.home_work_score + self.class_activity_score
+        return self.final_exam + self.project_score + self.home_work_score + self.class_activity_score + self.mid_term_exam
 
     def total_score(self):
         return self.mid_term_exam + self.final_exam + self.project_score + self.home_work_score + self.class_activity_score

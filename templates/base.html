@@ -227,8 +227,8 @@
                             <div class="dropdown d-inline-block">
                                 <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {% if request.user.student.avatar %}
-                                    <img class="rounded-circle header-profile-user" src="{{ request.user.student.avatar.url }}"
+                                    {% if request.user.staff.avatar %}
+                                    <img class="rounded-circle header-profile-user" src="{{ request.user.staff.avatar.url }}"
                                     alt="Header Avatar">
                                     {% else %}
                                     <img class="rounded-circle header-profile-user" src="{% static 'assets/images/users/avatar-1.jpg' %}"
@@ -257,19 +257,66 @@
             <div class="vertical-menu">
                 <div data-simplebar class="h-100">
                     <div id="sidebar-menu">
+                        {% if request.user.is_authenticated and request.user.is_student == True %}
                         <ul class="metismenu list-unstyled" id="side-menu">
                             <li class="menu-title" key="t-menu">Menu</li>
                             <li>
-                                <a href="javascript: void(0);" class="waves-effect">
+                                <a href="/" class="waves-effect">
                                     <i class="bx bx-home-circle"></i>
                                     <span key="t-dashboards">Dashboards</span>
                                 </a>
+                            </li>
+                            <li class="menu-title" key="t-apps">Apps</>
+                                
+                                <li>
+                                    <a href="javascript: void(0);" class="waves-effect">
+                                        <i class="bx bx-home-circle"></i>
+                                        <span key="t-dashboards">Courses</span>
+                                    </a>
+                                    <ul class="sub-menu" aria-expanded="false">
+                                        <li><a href="{% url 'all-courses' %}" key="t-default">All Courses</a></li>
+                                        <li><a href="{% url 'student-course-list' %}" key="t-saas">My Courses</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                            </li>
+                            <li>
+                                <a href="{% url 'curriculum-list' %}" class="waves-effect">
+                                    <i class="bx bx-notepad"></i>
+                                    <span key="t-calendar">Curriculums</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'student-profile' %}" class="waves-effect">
+                                    <i class="bx bx-notepad"></i>
+                                    <span key="t-calendar">Personal Information</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript: void(0);" class="waves-effect">
+                                    <i class="bx bx-home-circle"></i>
+                                    <span key="t-dashboards">Report</span>
+                                </a>
                                 <ul class="sub-menu" aria-expanded="false">
-                                    <li><a href="index.html" key="t-default">Default</a></li>
-                                    <li><a href="dashboard-saas.html" key="t-saas">Saas</a></li>
-                                    <li><a href="dashboard-crypto.html" key="t-crypto">Crypto</a></li>
-                                    <li><a href="dashboard-blog.html" key="t-blog">Blog</a></li>
+                                    <li><a href="{% url 'general-report' %}" key="t-default">All</a></li>
+                                    <li><a href="{% url 'semester-report' %}" key="t-saas"> {{ request.user.student.semester }} Semester </a></li>
                                 </ul>
+                            </li>
+                            <li>
+                                <a href="calendar.html" class="waves-effect">
+                                    <i class="bx bx-calendar"></i>
+                                    <span key="t-calendar">Calendar</span>
+                                </a>
+                            </li>
+                        </ul>
+                        {% else %}
+                        <ul class="metismenu list-unstyled" id="side-menu">
+                            <li class="menu-title" key="t-menu">Menu</li>
+                            <li>
+                                <a href="/" class="waves-effect">
+                                    <i class="bx bx-home-circle"></i>
+                                    <span key="t-dashboards">Dashboards</span>
+                                </a>
                             </li>
                             <li class="menu-title" key="t-apps">Apps</>
                                 <li>
@@ -323,6 +370,7 @@
                                 </a>
                             </li>
                         </ul>
+                        {% endif %}
                     </div>
                 </div>
             </div>

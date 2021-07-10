@@ -19,6 +19,9 @@ class StaffSignUpForm(UserCreationForm):
     father_name = forms.CharField(max_length=200, required=True)
     department = forms.ModelChoiceField(queryset=Department.objects.all())
     gender = forms.ChoiceField(choices=GENDER)
+    group = forms.ModelMultipleChoiceField(queryset=Group.objects.all(), widget=forms.CheckboxSelectMultiple,
+                                           required=True
+                                           )
 
     class Meta(UserCreationForm.Meta):
         model = User
@@ -33,11 +36,12 @@ class StaffSignUpForm(UserCreationForm):
         father_name = cleaned_data.get('father_name')
         department = cleaned_data.get('department')
         gender = cleaned_data.get("gender")
+        # group = cleaned_data.get("group")
         user = super().save(commit=False)
         user.is_staff = True
         if commit:
             user.save()
-            user.groups.add(Group.objects.get(name='Instructor'))
+            user.groups.add(*self.cleaned_data.get("group"))
 
         staff = Staff.objects.create(
             user=user,
