@@ -31,7 +31,7 @@
                     <h4 class="card-title" dir="rtl" style="float: right;">جدول نمرات</h4>
                    
                     <div class="table-responsive">
-                        <table class="table mb-0">
+                        <table style="border: 1px solid black;" class="table table-bordered table-md mb-0">
     
                             <thead class="thead-light">
                                 <tr>
@@ -58,12 +58,10 @@
                                 {% endfor %}
                             </tbody>
                         </table>
-                        <hr class="my-2">
-                        <button class="btn btn-primary font-size-18" style="float: right;">
-                            <i class="fa fa-download"></i>
-                        </button>
                     </div>
-    
+                    <a style="float: right;" href="javascript:window.print()" class="btn btn-outline-default font-size-20">
+                        <i class="fa fa-print"></i>
+                    </a>
                 </div>
             </div>
         </div>

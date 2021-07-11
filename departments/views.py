@@ -1,3 +1,4 @@
+from django.contrib.auth.models import Group
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from departments.models import Curriculum, Department
@@ -11,22 +12,43 @@ from django.views.generic import (
 from .forms import DepForm, CurriculumForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 
 
-class DepartmentCreateView(LoginRequiredMixin, CreateView):
+class GroupRequiredMixin(object):
+    group_required = None
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            raise PermissionDenied
+        else:
+            user_groups = []
+
+            for group in request.user.groups.values_list("name", flat=True):
+                user_groups.append(group)
+            if len(set(user_groups).intersection(self.group_required)) <= 0:
+                raise PermissionDenied
+
+        return super(GroupRequiredMixin, self).dispatch(request, *args, **kwargs)
+
+
+class DepartmentCreateView(LoginRequiredMixin, CreateView, GroupRequiredMixin):
+    group_required = ["Managers"]
     model = Department
     form_class = DepForm
     template_name = "departments/department_form.html"
     success_url = reverse_lazy("department-list")
 
 
-class DepartmentListView(LoginRequiredMixin, ListView):
+class DepartmentListView(LoginRequiredMixin, ListView,  GroupRequiredMixin):
+    group_required = ["Managers"]
     model = Department
     template_name = "departments/department/department_list.html"
     context_object_name = "departments"
 
 
-class DepartmentUpdateView(LoginRequiredMixin, UpdateView):
+class DepartmentUpdateView(LoginRequiredMixin, UpdateView, GroupRequiredMixin):
+    group_required = ["Managers"]
     model = Department
     fields = '__all__'
     success_url = reverse_lazy("department-list")
@@ -62,13 +84,15 @@ def department_detail(request, pk):
 # curriculums views
 
 
-class CurriculumCreateView(LoginRequiredMixin, CreateView):
+class CurriculumCreateView(LoginRequiredMixin, CreateView,  GroupRequiredMixin):
+    group_required = ["Managers"]
     model = Curriculum
     form_class = CurriculumForm
     template_name = "departments/curriculum_form.html"
 
 
-class CurriculumDetailView(LoginRequiredMixin, DetailView):
+class CurriculumDetailView(LoginRequiredMixin, DetailView, GroupRequiredMixin):
+    group_required = ["Managers"]
     model = Curriculum
     template_name = "departments/curriculum/curriculum_detail.html"
 

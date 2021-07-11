@@ -270,7 +270,7 @@
                                 
                                 <li>
                                     <a href="javascript: void(0);" class="waves-effect">
-                                        <i class="bx bx-home-circle"></i>
+                                        <i class="fa fa-graduation-cap"></i>
                                         <span key="t-dashboards">Courses</span>
                                     </a>
                                     <ul class="sub-menu" aria-expanded="false">
@@ -282,19 +282,19 @@
                             </li>
                             <li>
                                 <a href="{% url 'curriculum-list' %}" class="waves-effect">
-                                    <i class="bx bx-notepad"></i>
+                                    <i class="bx bx-windows"></i>
                                     <span key="t-calendar">Curriculums</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="{% url 'student-profile' %}" class="waves-effect">
-                                    <i class="bx bx-notepad"></i>
+                                    <i class="bx bx-user-check"></i>
                                     <span key="t-calendar">Personal Information</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="javascript: void(0);" class="waves-effect">
-                                    <i class="bx bx-home-circle"></i>
+                                    <i class="bx bx-bar-chart-alt-2"></i>
                                     <span key="t-dashboards">Report</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
@@ -303,7 +303,7 @@
                                 </ul>
                             </li>
                             <li>
-                                <a href="calendar.html" class="waves-effect">
+                                <a href="{% url 'calendar' %}" class="waves-effect">
                                     <i class="bx bx-calendar"></i>
                                     <span key="t-calendar">Calendar</span>
                                 </a>
@@ -364,7 +364,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="calendar.html" class="waves-effect">
+                                <a href="{% url 'calendar' %}" class="waves-effect">
                                     <i class="bx bx-calendar"></i>
                                     <span key="t-calendar">Calendar</span>
                                 </a>
@@ -379,22 +379,21 @@
                 <div class="page-content">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-12">
-                                <div class="page-title-box d-flex align-items-center justify-content-between">
-                                    <h4 class="mb-0 font-size-18">
-                                        {% block page_title %} {% endblock page_title %}
-                                    </h4>
-
-                                    <div class="page-title-right">
-                                        {% block breadcrumb %}
-
-                                        {% endblock breadcrumb %}
-                                        <!-- <ol class="breadcrumb m-0">
-                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboards</a></li>
-                                            <li class="breadcrumb-item active">Dashboard</li>
-                                        </ol> -->
+                            <div class="col-lg-10 m-auto">
+                                <div class="card rounded-lg">
+                                    <div class="page-title-box d-flex py-3 px-2 align-items-center justify-content-between">
+                                        <h4 class="mb-0 font-size-18">
+                                            {% block page_title %} {% endblock page_title %}
+                                        </h4>
+    
+                                        <div class="page-title-right">
+                                            {% block breadcrumb %}
+                                           
+        
+                                            {% endblock breadcrumb %}
+                                        </div>
+    
                                     </div>
-
                                 </div>
                             </div>
                         </div>
