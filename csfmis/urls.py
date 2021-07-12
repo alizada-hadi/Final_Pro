@@ -15,6 +15,7 @@ urlpatterns = [
     path("", include("courses.urls")),
     path("", include("results.urls")),
     path("calendar/", include("events.urls")),
+    path("select2/", include("django_select2.urls")),
     path('ckeditor/', include("ckeditor_uploader.urls")),
 ]
 

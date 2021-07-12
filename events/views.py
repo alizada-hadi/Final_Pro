@@ -36,22 +36,21 @@ def next_month(d):
     return month
 
 
-def create_event(request):
-    form = EventForm(request.POST or None)
-    if request.POST and form.is_valid():
-        title = form.cleaned_data['title']
-        description = form.cleaned_data['description']
-        start_time = form.cleaned_data['start_time']
-        end_time = form.cleaned_data['end_time']
-        Event.objects.get_or_create(
-            user=request.user,
-            title=title,
-            description=description,
-            start_time=start_time,
-            end_time=end_time
-        )
-        return HttpResponseRedirect(reverse('/'))
-    return render(request, 'events/event.html', {'form': form})
+class EventCreateView(generic.CreateView):
+    model = Event
+    form_class = EventForm
+    template_name = "events/event_form.html"
+    success_url = reverse_lazy("calendar")
+
+    def form_valid(self, form):
+        event = form.save(commit=False)
+        event.user = self.request.user
+        return super(EventCreateView, self).form_valid(form)
+
+    def get_form_kwargs(self):
+        kwargs = super(EventCreateView,  self).get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
 
 
 class EventEdit(generic.UpdateView):

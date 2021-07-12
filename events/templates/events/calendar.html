@@ -23,10 +23,19 @@ Calendar
         </li>
 </ol>
 {% endblock breadcrumb %}
-
-
 {% block content %}
 <div class="col-lg-10 m-auto">
+    <div class="btn-group mr-1 mt-2 mb-0">
+        <button type="button" class="btn btn-primary font-size-18">Add <i class="bx bx-plus"></i> </button>
+        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="mdi mdi-chevron-down"></i>
+        </button>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" href="{% url 'new-event' %}">Events</a>
+            <a class="dropdown-item" href="#">Assignments</a>
+        </div>
+    </div>
+    <hr>
     <div class="row">
         <div class="col-md-12">
             <div class="tile row">
@@ -34,8 +43,16 @@ Calendar
                     <div id="external-events">
                         <h4 class="mb-4">Running Events</h4>
                         {% for event in events_month %}
-                          <div class="fc-event">
-                              <h3>{{ event.title }}</h3>
+                          <div class="card p-2">
+                              <h3>{{ event.title.title }} </h3>
+                              <p class="text-muted"><b>Posted to : </b>
+                                {% for e in event.course.all %}
+                                <span class="badge badge-primary badge-pill font-size-14 my-1">
+                                    {{ e }}
+                                </span>
+                          {% endfor %}      
+                            </p>
+                              
                               <p>From: {{ event.start_time }}</p>
                               <p>To: {{ event.end_time }}</p>
                           </div>
@@ -62,7 +79,7 @@ Calendar
                                 <div class="modal-body">
                                     <div class="form-group">
                                         <label for="recipient-name" class="col-form-label">Event Title:</label>
-                                        {{ form.title }}
+                                        {{ form.title }} 
                                     </div>
                                     <div class="form-group">
                                         <label for="message-text" class="col-form-label">Description:</label>
