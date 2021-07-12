@@ -1,3 +1,4 @@
+from courses.models import Course
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.views import generic
@@ -9,9 +10,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy, reverse
 
 # Create your views here.
-from .forms import EventForm, AddMemberForm
+from .forms import EventForm, AddMemberForm, AssignmentForm
 from .utils import Calendar
-from .models import Event, EventMember
+from .models import Assignment, Event, EventMember
+from django.core.exceptions import PermissionDenied
+from django.utils.decorators import method_decorator
+from staff.decorators import staff_required
 
 
 def get_date(req_day):
@@ -36,6 +40,7 @@ def next_month(d):
     return month
 
 
+@method_decorator([login_required, staff_required], name="dispatch")
 class EventCreateView(generic.CreateView):
     model = Event
     form_class = EventForm
@@ -51,6 +56,52 @@ class EventCreateView(generic.CreateView):
         kwargs = super(EventCreateView,  self).get_form_kwargs()
         kwargs["user"] = self.request.user
         return kwargs
+
+
+@method_decorator([login_required, staff_required], name="dispatch")
+class AssignmentCreateView(generic.CreateView):
+    model = Assignment
+    form_class = AssignmentForm
+    template_name = "events/assignment_form.html"
+    success_url = reverse_lazy("assignment-list")
+
+    def form_valid(self, form):
+        assignment = form.save(commit=False)
+        assignment.user = self.request.user
+        return super(AssignmentCreateView, self).form_valid(form)
+
+    def get_form_kwargs(self):
+        kwargs = super(AssignmentCreateView, self).get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
+
+
+@method_decorator([login_required, staff_required], name="dispatch")
+class AssignmentUpdateView(generic.UpdateView):
+    model = Assignment
+    form_class = AssignmentForm
+    success_url = reverse_lazy('assignment-list')
+
+    def form_valid(self, form):
+        assignment = form.save(commit=False)
+        assignment.user = self.request.user
+        return super(AssignmentUpdateView, self).form_valid(form)
+
+    def get_form_kwargs(self):
+        kwargs = super(AssignmentUpdateView, self).get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
+
+
+class AssignmentListView(generic.ListView):
+    model = Assignment
+    template_name = "events/assignment_list.html"
+    context_object_name = "assignments"
+
+
+class AssignmentDetailView(generic.DetailView):
+    model = Assignment
+    template_name = "events/assignment_detail.html"
 
 
 class EventEdit(generic.UpdateView):
@@ -105,6 +156,7 @@ class CalendarViewNew(LoginRequiredMixin, generic.View):
         forms = self.form_class()
         events = Event.objects.get_all_events(user=request.user)
         events_month = Event.objects.get_running_events(user=request.user)
+        # my_courses = Course.objects.filter(students__in=[request.user.student])
         event_list = []
         # start: '2020-09-16T16:00:00'
         for event in events:
@@ -116,7 +168,7 @@ class CalendarViewNew(LoginRequiredMixin, generic.View):
         context = {
             'form': forms,
             'events': event_list,
-            'events_month': events_month
+            'events_month': events_month,
         }
         return render(request, self.template_name, context)
 
@@ -126,7 +178,7 @@ class CalendarViewNew(LoginRequiredMixin, generic.View):
             form = forms.save(commit=False)
             form.user = request.user
             form.save()
-            return redirect('calendarapp:calendar')
+            return redirect('calendar')
         context = {
             'form': forms
         }

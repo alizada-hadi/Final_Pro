@@ -18,3 +18,16 @@ class EventMemberAdmin(admin.ModelAdmin):
     model = models.EventMember
     list_display = ['id', 'event', 'course', 'created_at', 'updated_at']
     list_filter = ['event']
+
+
+@admin.register(models.Assignment)
+class AssignmentAdmin(admin.ModelAdmin):
+    list_display = (
+        "title",
+        "content",
+        "assign_date",
+        "due_date",
+    )
+    prepopulated_fields = {
+        "slug": ("title",)
+    }

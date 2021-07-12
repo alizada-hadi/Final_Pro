@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Assignments 
+{% endblock title %}
+
+
+{% block page_title %}
+     Assignments
+{% endblock page_title %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb m-0">
+        <li class="breadcrumb-item"><a href="/">
+            <i class="bx bx-home-circle text-primary font-size-20"></i>
+        </a></li>
+        <li class="breadcrumb-item active">
+            Assignments
+        </li>
+</ol>
+{% endblock breadcrumb %}
+
+
+{% block content %}
+<div class="col-lg-10 m-auto">
+    <div class="row">
+        {% for assignment in assignments %}
+        <div class="col-lg-4">
+            <div class="card border border-info">
+                <div class="card-header bg-transparent border-info">
+                    <h5 class="my-0 text-info"><i class="bx bx-time font-size-20 mr-3"></i> Assigned : {{ assignment.assign_date|timesince }} Ago </h5>
+                    <h5 class="mt-2 text-info"><i class="bx bx-stopwatch font-size-20 mr-3"></i> Due Time : {{ assignment.due_date }} </h5>
+                </div>
+                <div class="card-body">
+                    {% if request.user.is_staff == True %}
+                    <h5 class="card-title mt-0">
+                        <a href="{% url 'assignment-update' assignment.slug %}">{{ assignment.title.title }}</a>
+                    </h5>
+                    {% elif request.user.is_student == True %}
+                    <h5 class="card-title mt-0">
+                        <a href="{% url 'assignment-detail' assignment.slug %}">{{ assignment.title.title }}</a>
+                    </h5>
+                    {% endif %}
+                    <p class="card-text">  </p>
+                </div>
+                <div class="card-footer">
+                    
+                {% for m in assignment.member.all %}
+                    <span class="badge badge-secondary badge-pill p-2">
+                        {{ m.title }}
+                    </span>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

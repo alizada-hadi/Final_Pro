@@ -1,8 +1,10 @@
+from django.template.defaultfilters import slugify
 from django.db import models
 from accounts.models import User
 from courses.models import Course
 from django.urls import reverse
 from datetime import datetime
+from ckeditor_uploader.fields import RichTextUploadingField
 
 
 class EventAbstract(models.Model):
@@ -66,3 +68,20 @@ class Event(EventAbstract):
     def get_html_url(self):
         url = reverse('event-detail', args=(self.id,))
         return f'<a href="{url}"> {self.title} </a>'
+
+
+class Assignment(models.Model):
+    title = models.CharField(max_length=255)
+    content = RichTextUploadingField()
+    slug = models.SlugField(unique=True, null=False)
+    assign_date = models.DateTimeField(auto_now_add=True)
+    due_date = models.DateTimeField()
+    member = models.ManyToManyField(Course)
+
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        return super().save(*args, **kwargs)

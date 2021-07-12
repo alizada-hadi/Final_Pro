@@ -25,6 +25,7 @@ Calendar
 {% endblock breadcrumb %}
 {% block content %}
 <div class="col-lg-10 m-auto">
+    {% if request.user.is_staff == True %}
     <div class="btn-group mr-1 mt-2 mb-0">
         <button type="button" class="btn btn-primary font-size-18">Add <i class="bx bx-plus"></i> </button>
         <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -32,33 +33,89 @@ Calendar
         </button>
         <div class="dropdown-menu">
             <a class="dropdown-item" href="{% url 'new-event' %}">Events</a>
-            <a class="dropdown-item" href="#">Assignments</a>
+            <a class="dropdown-item" href="{% url 'assignment-create' %}">Assignments</a>
         </div>
     </div>
+    {% endif %}
     <hr>
+    
     <div class="row">
         <div class="col-md-12">
             <div class="tile row">
                 <div class="col-md-3">
                     <div id="external-events">
                         <h4 class="mb-4">Running Events</h4>
-                        {% for event in events_month %}
-                          <div class="card p-2">
-                              <h3>{{ event.title.title }} </h3>
-                              <p class="text-muted"><b>Posted to : </b>
-                                {% for e in event.course.all %}
-                                <span class="badge badge-primary badge-pill font-size-14 my-1">
-                                    {{ e }}
-                                </span>
-                          {% endfor %}      
-                            </p>
-                              
-                              <p>From: {{ event.start_time }}</p>
-                              <p>To: {{ event.end_time }}</p>
-                          </div>
-                        {% empty %}
-                          <p>No Running Events Found</p>
+                        {% if request.user.is_staff == True %}
+                        {% for e in events_month %}
+                            <div class="card p-2">
+                                <h4> {{ e.title.title }} </h4>
+                                <b>From : </b> {{ e.start_time }}
+                                <b>To : </b> {{ e.end_time }}
+                            </div>
                         {% endfor %}
+                        {% elif request.user.is_student == True %}
+                        {% for c in my_courses %}
+                        <div class=" p-2">   
+                            {% for e in c.event_set.all %}
+                            <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title mt-0" id="myModalLabel">
+                                                <i class="bx bx-calendar text-primary font-size-24"></i>
+                                            </h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h2 class="mb-2">{{ e.title.title }}</h2>
+                                            <div class="row mt-3">
+                                                <div class="col-lg-6">
+                                                    <h6>Start Time</h6>
+                                                    <span class="" style="color: red;">
+                                                      {{ e.start_time }}</span>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                  <h6>Ent Time</h6>
+                                                  <span class="" style="color: red;">
+                                                    {{ e.end_time }}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="mt-3">
+                                                <h6>Participants</h6>
+                                                {% for ev in e.course.all %}
+                                                <span class="badge badge-default p-2 font-size-16" style="border: 1px solid gray;">
+                                                      {{ ev.title.title }}
+                                                  </span>
+                                                  {% endfor %}
+                                            </div>
+
+                                            <div class="mt-3">
+                                                <h6>Description</h6>
+                                                <h5>{{ e.description|safe }}</h5>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                              <p class="text-muted"> 
+                                      <button class="btn btn-outline-secondary "data-toggle="modal" data-target="#myModal" style="width: 100%;">
+                                          {{ e.title.title }}
+                                      </button>
+                              </p>
+                            {% endfor %}
+                          </p>
+                        </div>
+                      {% empty %}
+                        <p>You haven't enrolled for a class yet</p>
+                      {% endfor %}
+                        {% endif %}
                     </div>
                 </div>
                 <div class="col-md-9">

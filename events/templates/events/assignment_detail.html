@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+     {{ object.title }}
+    
+{% endblock title %}
+
+
+{% block page_title %}
+{{ object.title }}
+{% endblock page_title %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb m-0">
+        <li class="breadcrumb-item"><a href="{% url 'assignment-list' %}">
+            Assignment List
+        </a></li>
+        <li class="breadcrumb-item active">
+            {{ object.title }}
+        </li>
+</ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+<div class="row">
+    <div class="col-10 m-auto">
+        <div class="card">
+            <div class="card-body">
+
+                <h4 class="card-title">
+                    {{ object.title }} Assignment
+                </h4>
+                <hr>
+                <h2> {{ object.title.title }} </h2>
+                <h6 class="text-muted ml-3"> Assigned : {{ object.assign_date|timesince }} ago </h6>
+                <h6 class="text-muted ml-3"> Due Date : {{ object.due_date }} </h6>
+                <hr>
+                <span style="background-color: lightblue;">
+                    {{ object.content|safe }}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
