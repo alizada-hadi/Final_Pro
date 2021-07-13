@@ -1,3 +1,4 @@
+from students.models import Student
 from django.template.defaultfilters import slugify
 from django.db import models
 from accounts.models import User
@@ -5,6 +6,7 @@ from courses.models import Course
 from django.urls import reverse
 from datetime import datetime
 from ckeditor_uploader.fields import RichTextUploadingField
+from staff.models import Staff
 
 
 class EventAbstract(models.Model):
@@ -71,6 +73,8 @@ class Event(EventAbstract):
 
 
 class Assignment(models.Model):
+    instructor = models.ForeignKey(
+        Staff, on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=255)
     content = RichTextUploadingField()
     slug = models.SlugField(unique=True, null=False)
@@ -85,3 +89,10 @@ class Assignment(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         return super().save(*args, **kwargs)
+
+
+class Respond(models.Model):
+    student = models.ForeignKey(
+        Student, on_delete=models.CASCADE)
+    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
+    content = RichTextUploadingField()

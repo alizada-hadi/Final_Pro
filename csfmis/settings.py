@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-xjgja06iot92t0#===*q3s9l6)v(w=2jjt7zd#*onybs1e95_-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost"]
 
 
 # Application definition
@@ -120,8 +120,12 @@ WSGI_APPLICATION = 'csfmis.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'csfmis',
+        'USER': 'postgres',
+        'PASSWORD': 'testing321',
+        'HOST': 'localhost',
+        "PORT": '',
     }
 }
 

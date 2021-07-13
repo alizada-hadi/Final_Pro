@@ -51,9 +51,13 @@
                                         <a href="{% url 'student-profile' %}">
                                         <div class="row mt-2">
                                             <div class="col-lg-3">
+                                             {% if request.user.student.avatar %}
                                              <img src="{{ request.user.student.avatar.url }}" alt=""
                                              class="avatar-sm rounded-circle mb-2"
                                              >
+                                             {% else %}
+                                                <img src="{% static 'assets/images/users/avatar-1.jpg' %}" alt="" class="avatar-sm rounded-circle mb-2">
+                                             {% endif %}
                                             </div>
                                             <div class="col-lg-9">
                                                 <h5> {{ request.user.username.title }} </h5>

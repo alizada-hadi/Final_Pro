@@ -1,6 +1,6 @@
 from courses.models import Course
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, request
 from django.views import generic
 from django.utils.safestring import mark_safe
 from datetime import timedelta, datetime, date
@@ -10,12 +10,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy, reverse
 
 # Create your views here.
-from .forms import EventForm, AddMemberForm, AssignmentForm
+from .forms import EventForm, AddMemberForm, AssignmentForm, RespondForm
 from .utils import Calendar
-from .models import Assignment, Event, EventMember
+from .models import Assignment, Event, EventMember, Respond
 from django.core.exceptions import PermissionDenied
 from django.utils.decorators import method_decorator
 from staff.decorators import staff_required
+from django.views.generic.edit import FormMixin
 
 
 def get_date(req_day):
@@ -98,10 +99,73 @@ class AssignmentListView(generic.ListView):
     template_name = "events/assignment_list.html"
     context_object_name = "assignments"
 
+    def get_context_data(self, **kwargs):
+        context = super(AssignmentListView, self).get_context_data(**kwargs)
+        context["number_of_submission"] = Respond.objects.filter(
+            student=self.request.user.student).count()
+        respond = Respond.objects.filter(
+            student=self.request.user.student).count()
+        context["status"] = False
+        if respond > 0:
+            context["status"] = True
+        return context
 
-class AssignmentDetailView(generic.DetailView):
+
+class AssignmentStaffListView(generic.ListView):
+    model = Assignment
+    template_name = "events/staff_assignment_list.html"
+    context_object_name = "assignments"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["responds"] = Respond.objects.all().count()
+        return context
+
+
+class AssignmentDetailView(FormMixin, generic.DetailView):
     model = Assignment
     template_name = "events/assignment_detail.html"
+    form_class = RespondForm
+    success_url = reverse_lazy("assignment-list")
+
+    def get_context_data(self, **kwargs):
+        context = super(AssignmentDetailView, self).get_context_data(**kwargs)
+        context["form"] = RespondForm(
+            initial={"assignment": self.object, "student": self.request.user.student.pk})
+        print(context["form"])
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        form.save()
+        return super(AssignmentDetailView, self).form_valid(form)
+
+
+def check_assignment_view(reqeust, slug):
+    assignment = Assignment.objects.get(slug=slug)
+    responds = Respond.objects.filter(assignment=assignment)
+    number_of_respond = Respond.objects.filter(assignment=assignment).count()
+    context = {
+        "assignment": assignment,
+        "responds": responds,
+        "number_of_respond": number_of_respond
+    }
+    return render(reqeust, "events/respond_list.html", context)
+
+
+def respond_detail(request, pk):
+    respond = Respond.objects.get(pk=pk)
+    context = {
+        "respond": respond
+    }
+    return render(request, "events/respond_detail.html", context)
 
 
 class EventEdit(generic.UpdateView):

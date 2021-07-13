@@ -31,3 +31,6 @@ class AssignmentAdmin(admin.ModelAdmin):
     prepopulated_fields = {
         "slug": ("title",)
     }
+
+
+admin.site.register(models.Respond)

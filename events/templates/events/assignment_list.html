@@ -34,24 +34,41 @@
                     <h5 class="mt-2 text-info"><i class="bx bx-stopwatch font-size-20 mr-3"></i> Due Time : {{ assignment.due_date }} </h5>
                 </div>
                 <div class="card-body">
-                    {% if request.user.is_staff == True %}
-                    <h5 class="card-title mt-0">
-                        <a href="{% url 'assignment-update' assignment.slug %}">{{ assignment.title.title }}</a>
-                    </h5>
-                    {% elif request.user.is_student == True %}
                     <h5 class="card-title mt-0">
                         <a href="{% url 'assignment-detail' assignment.slug %}">{{ assignment.title.title }}</a>
                     </h5>
-                    {% endif %}
-                    <p class="card-text">  </p>
+                    
+                    
+                </div>
+                <div class="col-lg-6 mb-2">
+                    {% for m in assignment.member.all %}
+                        <span class="badge badge-info badge-pill font-size-16 p-2">
+                            {{ m.title }}
+                        </span>
+                    {% endfor %}
                 </div>
                 <div class="card-footer">
                     
-                {% for m in assignment.member.all %}
-                    <span class="badge badge-secondary badge-pill p-2">
-                        {{ m.title }}
-                    </span>
-                {% endfor %}
+                <div class="row">
+                    <div class="col-lg-8">
+                        <span class="badge badge-info badge-pill font-size-14 mr-2">
+                            {{ number_of_submission }}
+                        </span>
+                        <span>Submission</span> | {{ assignment.submitted_at}} ago
+                    </div>
+                    <div class="col-lg-4">
+                        {% if status == False %}
+                        <a href="{% url 'assignment-detail' assignment.slug %}" class="btn btn-outline-warning" style="float: right;">
+                            Not Submitted
+                        </a>
+                        {% else %}
+                        <a href="{% url 'assignment-detail' assignment.slug %}" class="btn btn-outline-secondary" style="float: right;"> 
+                            Resubmit
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                
                 </div>
             </div>
         </div>

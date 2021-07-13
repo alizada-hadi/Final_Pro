@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Check Respond 
+{% endblock title %}
+
+
+{% block page_title %}
+     Check Respond
+{% endblock page_title %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb m-0">
+        <li class="breadcrumb-item"><a href="/">
+            <i class="bx bx-home-circle text-primary font-size-20"></i>
+        </a></li>
+        <li class="breadcrumb-item active">
+            Check Respond
+        </li>
+</ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+<script src="{% static 'assets/libs/jquery/jquery.min.js' %}"></script>
+    <div class="col-lg-10 m-auto">
+        <div class="card p-2">
+            <h6 class="text-secondary">Checking the Responds</h6>
+            <h4 class="text-primary">{{ assignment.title.title }}</h4>
+            <h6 class="text-secondary"> <b>Due Date: </b> {{ assignment.due_date }} </h6>
+            
+        </div>
+        <div class="card">
+            <h4 class="card-title mb-4">
+                {% for c in assignment.member.all %}
+                    {{ c.title.title }}
+                {% endfor %}
+            </h4>
+
+            <div class="card-body px-3 py-2">
+                {{ respond.content|safe }}
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+

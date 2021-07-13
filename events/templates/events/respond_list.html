@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Check Respond 
+{% endblock title %}
+
+
+{% block page_title %}
+     Check Respond
+{% endblock page_title %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb m-0">
+        <li class="breadcrumb-item"><a href="/">
+            <i class="bx bx-home-circle text-primary font-size-20"></i>
+        </a></li>
+        <li class="breadcrumb-item active">
+            Check Respond
+        </li>
+</ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+<script src="{% static 'assets/libs/jquery/jquery.min.js' %}"></script>
+    <div class="col-lg-10 m-auto">
+        <div class="card p-2">
+            <h6 class="text-secondary">Checking the Responds</h6>
+            <h4 class="text-primary">{{ assignment.title.title }}</h4>
+            <h6 class="text-secondary"> <b>Due Date: </b> {{ assignment.due_date }} </h6>
+            <div class="col-lg-6 mt-3">
+                <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#home1" role="tab">
+                            <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                            <span class="d-none d-sm-block"> <span class="badge badge-primary badge-pill p-1 font-size-16 mr-2"> {{ number_of_respond }} </span> Submitted</span> 
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#profile1" role="tab">
+                            <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
+                            <span class="d-none d-sm-block">Not Submitted</span> 
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#messages1" role="tab">
+                            <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
+                            <span class="d-none d-sm-block">Graded</span>   
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#settings1" role="tab">
+                            <span class="d-block d-sm-none"><i class="fas fa-cog"></i></span>
+                            <span class="d-none d-sm-block">All Students</span>    
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="card">
+            <div class="tab-content p-3 text-muted">
+                <div class="tab-pane active" id="home1" role="tabpanel">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title mb-4">
+                                    {% for c in assignment.member.all %}
+                                        {{ c.title.title }}
+                                    {% endfor %}
+                                </h4>
+                                <div class="table-responsive">
+                                    <table class="table mb-0">
+
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th>
+                                                    #
+                                                </th>
+                                                <th>Student Name</th>
+                                                <th>Submission</th>
+                                                <th>Graded</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            
+                                            {% for res in responds %}
+                                                <tr class="clickable-row" data-href="{% url 'respond-detail' res.pk %}">
+                                                    <td> {{ forloop.counter }} </td>
+                                                    <td>
+                                                        <div class="row">
+                                                            <div class="col-lg-1">
+                                                                {% if res.student.avatar %}
+                                                                <img src="{{ res.student.avatar.url }}" alt="" class="avatar-sm border">
+                                                                
+                                                                {% else %}
+                                                                <img src="{% static 'assets/images/users/avatar-2.jpg' %}" alt="" class="avatar-sm border">
+                                                                {% endif %}
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                                <span style="float: left;" class="ml-3 font-size-14">
+                                                                    {{ res.student.user.username.title }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                      Submitted  
+                                                    </td>
+                                                    <td>
+                                                        Not Graded
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="profile1" role="tabpanel">
+                    <p class="mb-0">
+                        Food truck fixie locavore, accusamus mcsweeney's marfa nulla
+                        single-origin coffee squid. Exercitation +1 labore velit, blog
+                        sartorial PBR leggings next level wes anderson artisan four loko
+                        farm-to-table craft beer twee. Qui photo booth letterpress,
+                        commodo enim craft beer mlkshk aliquip jean shorts ullamco ad
+                        vinyl cillum PBR. Homo nostrud organic, assumenda labore
+                        aesthetic magna delectus.
+                    </p>
+                </div>
+                <div class="tab-pane" id="messages1" role="tabpanel">
+                    <p class="mb-0">
+                        Etsy mixtape wayfarers, ethical wes anderson tofu before they
+                        sold out mcsweeney's organic lomo retro fanny pack lo-fi
+                        farm-to-table readymade. Messenger bag gentrify pitchfork
+                        tattooed craft beer, iphone skateboard locavore carles etsy
+                        salvia banksy hoodie helvetica. DIY synth PBR banksy irony.
+                        Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh
+                        mi whatever gluten-free carles.
+                    </p>
+                </div>
+                <div class="tab-pane" id="settings1" role="tabpanel">
+                    <p class="mb-0">
+                        Trust fund seitan letterpress, keytar raw denim keffiyeh etsy
+                        art party before they sold out master cleanse gluten-free squid
+                        scenester freegan cosby sweater. Fanny pack portland seitan DIY,
+                        art party locavore wolf cliche high life echo park Austin. Cred
+                        vinyl keffiyeh DIY salvia PBR, banh mi before they sold out
+                        farm-to-table VHS viral locavore cosby sweater. Lomo wolf viral,
+                        mustache readymade keffiyeh craft.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        (function ($) {
+          $('.clickable-row').css('cursor', 'pointer');
+          $(".clickable-row").click(function () {
+            window.location = $(this).data("href");
+          });
+        })(jQuery)
+    
+    </script>
+{% endblock content %}
+

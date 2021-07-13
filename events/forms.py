@@ -1,7 +1,7 @@
 from django.contrib.contenttypes import fields
 from django.forms import ModelForm, DateInput, widgets
 from django import forms
-from .models import EventMember, Event, Assignment
+from .models import EventMember, Event, Assignment, Respond
 from courses.models import Course
 from django_select2 import forms as s2forms
 
@@ -11,6 +11,16 @@ class CourseWidget(s2forms.ModelSelect2MultipleWidget):
         'title__icontains',
         'slug__icontains',
     ]
+
+
+class RespondForm(ModelForm):
+    class Meta:
+        model = Respond
+        fields = ["student", "assignment", "content"]
+        widgets = {
+            "assignment": forms.HiddenInput(),
+            "student": forms.HiddenInput()
+        }
 
 
 class AssignmentForm(ModelForm):
