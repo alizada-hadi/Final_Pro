@@ -25,6 +25,7 @@
 
 {% block content %}
 <div class="col-lg-10 m-auto">
+    <a href="{% url 'assignment-create' %}" class="btn btn-outline-secondary btn-lg mb-3"> New Assignment </a>
     <div class="row">
         {% for assignment in assignments %}
         <div class="col-lg-4">
@@ -51,7 +52,9 @@
                     
                 <div class="row">
                     <div class="col-lg-12">
-                        <a href="{% url 'responds' assignment.slug  %}" class="btn btn-outline-secondary font-size-16" style="float: right;">{{ responds }} submissions</a>
+                        <a href="{% url 'responds' assignment.slug  %}" class="btn btn-outline-secondary font-size-16" style="float: right;">
+                        {{ assignment.respond_set.all.count }}    
+                        submissions</a>
                     </div>
                     
                 </div>
@@ -59,6 +62,10 @@
                 </div>
             </div>
         </div>
+        {% empty %}
+        <p class="alert alert-info text-center font-size-16">
+            You haven't assigned any task yet.
+        </p>
         {% endfor %}
     </div>
 </div>

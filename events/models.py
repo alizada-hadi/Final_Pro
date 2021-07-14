@@ -74,13 +74,14 @@ class Event(EventAbstract):
 
 class Assignment(models.Model):
     instructor = models.ForeignKey(
-        Staff, on_delete=models.CASCADE, null=True, blank=True)
+        Staff, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     content = RichTextUploadingField()
-    slug = models.SlugField(unique=True, null=False)
+    slug = models.SlugField(unique=False, null=False)
     assign_date = models.DateTimeField(auto_now_add=True)
     due_date = models.DateTimeField()
-    member = models.ManyToManyField(Course)
+    member = models.ForeignKey(
+        Course, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -92,7 +93,16 @@ class Assignment(models.Model):
 
 
 class Respond(models.Model):
+    COMPLEXITY = (
+        ("easy", "easy"),
+        ("medium", "medium"),
+        ("hard", "hard"),
+    )
     student = models.ForeignKey(
-        Student, on_delete=models.CASCADE)
-    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
+        Student, on_delete=models.CASCADE, unique=False)
+    assignment = models.ForeignKey(
+        Assignment, on_delete=models.CASCADE, unique=False)
+    complexity = models.CharField(
+        max_length=20, choices=COMPLEXITY, default="easy")
     content = RichTextUploadingField()
+    responded_at = models.DateTimeField(auto_now_add=True)

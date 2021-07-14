@@ -121,7 +121,7 @@ WSGI_APPLICATION = 'csfmis.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'csfmis',
+        'NAME': 'csfdb',
         'USER': 'postgres',
         'PASSWORD': 'testing321',
         'HOST': 'localhost',

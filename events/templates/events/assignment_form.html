@@ -48,10 +48,13 @@ Update {{ object.title }}
     {% endif %}
                 </h4>
                 <hr>
-                <form action="" method="POST">
+                <form action="" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{ form.media }}
                     <div class="row mx-4">
+                            <div class="form-group">
+                                {% render_field form.instructor class="form-control font-size-14"  %}
+                            </div>
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="">Course</label>

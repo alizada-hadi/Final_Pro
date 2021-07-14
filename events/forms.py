@@ -14,26 +14,35 @@ class CourseWidget(s2forms.ModelSelect2MultipleWidget):
 
 
 class RespondForm(ModelForm):
+    COMPLEXITY = (
+        ("easy", "easy"),
+        ("medium", "medium"),
+        ("hard", "hard"),
+    )
+    complexity = forms.ChoiceField(
+        choices=COMPLEXITY, widget=forms.RadioSelect)
+
     class Meta:
         model = Respond
-        fields = ["student", "assignment", "content"]
+        fields = ["student", "assignment", "content", "complexity"]
         widgets = {
             "assignment": forms.HiddenInput(),
-            "student": forms.HiddenInput()
+            "student": forms.HiddenInput(),
         }
 
 
 class AssignmentForm(ModelForm):
     class Meta:
         model = Assignment
-        fields = ['title', 'content', 'member', 'due_date']
+        fields = ['instructor', 'title', 'content', 'member', 'due_date']
 
         widgets = {
-            "member": CourseWidget,
+
             "due_date": DateInput(
                 attrs={'type': 'datetime-local', 'class': 'form-control'},
                 format='%Y-%m-%dT%H:%M'
             ),
+            "instructor": forms.HiddenInput(),
         }
 
     def __init__(self, *args, **kwargs):
@@ -41,8 +50,6 @@ class AssignmentForm(ModelForm):
         super(AssignmentForm, self).__init__(*args, **kwargs)
         # input_formats to parse HTML5 datetime-local input to datetime field
         self.fields['due_date'].input_formats = ('%Y-%m-%dT%H:%M',)
-        self.fields["member"].queryset = Course.objects.filter(
-            owner=self.user)
 
 
 class EventForm(ModelForm):

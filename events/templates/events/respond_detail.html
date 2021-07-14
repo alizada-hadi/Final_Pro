@@ -33,9 +33,7 @@
         </div>
         <div class="card">
             <h4 class="card-title mb-4">
-                {% for c in assignment.member.all %}
-                    {{ c.title.title }}
-                {% endfor %}
+                {{ assignment.member.title }}
             </h4>
 
             <div class="card-body px-3 py-2">

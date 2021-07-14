@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load events_tags %}
 {% load static %}
 {% load widget_tweaks %}
 
@@ -41,31 +42,23 @@
                     
                 </div>
                 <div class="col-lg-6 mb-2">
-                    {% for m in assignment.member.all %}
+                    
                         <span class="badge badge-info badge-pill font-size-16 p-2">
-                            {{ m.title }}
+                            {{ assignment.member.title }}
                         </span>
-                    {% endfor %}
+                    
                 </div>
                 <div class="card-footer">
                     
                 <div class="row">
                     <div class="col-lg-8">
                         <span class="badge badge-info badge-pill font-size-14 mr-2">
-                            {{ number_of_submission }}
+                            {% student_submissions request.user.student assignment.id %}
                         </span>
                         <span>Submission</span> | {{ assignment.submitted_at}} ago
                     </div>
                     <div class="col-lg-4">
-                        {% if status == False %}
-                        <a href="{% url 'assignment-detail' assignment.slug %}" class="btn btn-outline-warning" style="float: right;">
-                            Not Submitted
-                        </a>
-                        {% else %}
-                        <a href="{% url 'assignment-detail' assignment.slug %}" class="btn btn-outline-secondary" style="float: right;"> 
-                            Resubmit
-                        </a>
-                        {% endif %}
+                        {% submission_status request.user.student assignment.id %}
                     </div>
                 </div>
                 
