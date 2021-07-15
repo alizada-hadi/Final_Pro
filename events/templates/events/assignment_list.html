@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load events_tags %}
+{% load tz %}
 {% load static %}
 {% load widget_tweaks %}
 
@@ -44,9 +45,9 @@
                 <div class="col-lg-6 mb-2">
                     
                         <span class="badge badge-info badge-pill font-size-16 p-2">
-                            {{ assignment.member.title }}
+                            {{ assignment.member.title }}                         
                         </span>
-                    
+                        
                 </div>
                 <div class="card-footer">
                     

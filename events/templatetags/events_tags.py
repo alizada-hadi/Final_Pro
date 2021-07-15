@@ -1,7 +1,16 @@
+from django.utils import timezone
+from tzlocal import get_localzone
+from datetime import datetime, timezone
+import pytz
+from datetime import datetime
 from django.db.models import Count
 from django import template
 from ..models import Respond, Assignment
 register = template.Library()
+
+utc_dt = datetime.now(timezone.utc)
+
+AFG = pytz.timezone('Asia/Kabul')
 
 
 @register.simple_tag

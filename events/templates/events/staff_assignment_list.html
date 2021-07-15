@@ -38,8 +38,7 @@
                     <h5 class="card-title mt-0">
                         <a href="{% url 'assignment-update' assignment.slug %}">{{ assignment.title.title }}</a>
                     </h5>
-                    
-                    
+
                 </div>
                 <div class="col-lg-6 mb-2">
                     {% for m in assignment.member.all %}
