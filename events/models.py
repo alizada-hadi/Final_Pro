@@ -80,6 +80,7 @@ class Assignment(models.Model):
     slug = models.SlugField(unique=False, null=False)
     assign_date = models.DateTimeField(auto_now_add=True)
     due_date = models.DateTimeField()
+    avalibality = models.BooleanField(default=False)
     member = models.ForeignKey(
         Course, on_delete=models.CASCADE, blank=True, null=True)
 

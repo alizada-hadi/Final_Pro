@@ -34,7 +34,8 @@ class RespondForm(ModelForm):
 class AssignmentForm(ModelForm):
     class Meta:
         model = Assignment
-        fields = ['instructor', 'title', 'content', 'member', 'due_date']
+        fields = ['instructor', 'title', 'content',
+                  'avalibality', 'member', 'due_date']
 
         widgets = {
 

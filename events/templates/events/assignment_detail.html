@@ -24,6 +24,7 @@
 {% endblock breadcrumb %}
 
 {% block content %}
+
 <div class="row">
     <div class="col-10 m-auto">
             <div class="row">
@@ -66,7 +67,16 @@
                             </div>
                             <div class="col-lg-11">
                                 <h5 class="text-secondary ml-2">Due Date</h5>
-                                <span class="text-muted ml-2"> {{ object.due_date }} </span>
+                                <div class="row">
+                                    <div class="col">
+                                        <span class="text-muted ml-2" id="event-box"> {{ object.due_date|date:"M d, Y H:m:s" }} </span>
+                                    </div>
+                                    <div class="col">
+                                        <span class="text-muted" id="countDown">
+                                            
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -98,3 +108,7 @@
     </div>
 </div>
 {% endblock content %}
+
+{% block script %}
+    <script src="{% static 'assets/js/main.js' %}"></script>
+{% endblock script %}

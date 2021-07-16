@@ -73,6 +73,13 @@ Update {{ object.title }}
                                 {% render_field form.due_date class="form-control" %}
                             </div>
                         </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="">Lock After Due Date</label>
+                                <br>
+                                {% render_field form.avalibality %}
+                            </div>
+                        </div>
                     </div>
                     <div class="col-lg-6 mr-auto mx-4 my-1">
                         <label for="">Assignment Description</label>
