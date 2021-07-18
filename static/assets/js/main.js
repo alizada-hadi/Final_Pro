@@ -18,8 +18,10 @@ const countdown = setInterval(() => {
     }
     else{
         clearInterval(countDownBox)
-        countDownBox.innerHTML = "Count Down Completed"
+        countDownBox.innerHTML = "<span class='badge badge-danger badge-pill p-2'> Assignment Terminated </span>"
     }
 
 }, 1000)
 
+
+console.log("hello there")

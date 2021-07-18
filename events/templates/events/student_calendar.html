@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Calendar   
+{% endblock title %}
+
+
+{% block page_title %}
+Calendar
+{% endblock page_title %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb m-0">
+        <li class="breadcrumb-item"><a href="">
+            <i class="bx bx-home-circle font-size-20 text-primary">
+
+            </i>
+        </a></li>
+        <li class="breadcrumb-item active">
+           My Event
+        </li>
+</ol>
+{% endblock breadcrumb %}
+{% block content %}
+<div class="col-lg-10 m-auto">
+    
+    <hr>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile row">
+                <div class="col-md-3">
+                    <div id="external-events">
+                        <h4 class="mb-4">Running Events</h4>
+                       
+                        {% for event in events %}
+                        <div class=" p-2">   
+                            
+                            <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title mt-0" id="myModalLabel">
+                                                <i class="bx bx-calendar text-primary font-size-24"></i>
+                                            </h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body" id="modal-body">
+                                            
+                                            
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                              <p class="text-muted"> 
+                                      <button class="btn btn-outline-secondary font-size-16 modal-button "data-toggle="modal" data-target="#myModal" style="width: 100%;"
+                                      data-pk="{{event.pk}}",
+                                      data-event="{{ event.title.title }}"
+                                      data-start_time="{{event.start_time}}"
+                                      data-end_time="{{event.end_time}}"
+                                      data-course="{% for i in event.course.all %} {{i.title}} {% endfor %}"
+                                      data-description="{{event.description}}"
+                                      >
+                                          {{ event.title.title }}
+                                      </button>
+                              </p>
+                          </p>
+                        </div>
+                      {% empty %}
+                        <p>You haven't enrolled for a class yet</p>
+                      {% endfor %}
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div id="student-calendar">
+                        
+                    </div>
+                </div>
+    
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('student-calendar');
+      var today = new Date();
+
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay,list'
+        },
+        initialDate: today,
+        navLinks: true, // can click day/week names to navigate views
+        selectable: true,
+        selectMirror: true,
+        editable: true,
+        dayMaxEvents: true, // allow "more" link when too many events
+      });
+
+      calendar.render();
+    });
+    const closeBtn1 = document.getElementById('modalClose1');
+    const closeBtn2 = document.getElementById('modalClose2');
+    closeBtn1.addEventListener('click',()=>{
+      const eventModal = document.getElementById('eventModal')
+      eventModal.style.display = 'none';
+    });
+    closeBtn2.addEventListener('click',()=>{
+      const eventModal = document.getElementById('eventModal')
+      eventModal.style.display = 'none';
+    });
+    
+</script>
+{% endblock content %}
+
+
+{% block script %}
+<script src="{% static 'assets/js/modal.js' %}"></script>
+{% endblock script %}

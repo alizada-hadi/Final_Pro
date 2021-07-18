@@ -1,3 +1,4 @@
+from events.models import Assignment
 from ckeditor import fields
 from django import forms
 from .models import Course, Module
@@ -11,3 +12,9 @@ ModuleFormSet = inlineformset_factory(
     extra=1,
     can_delete=True
 )
+
+
+class AssignmentForm(forms.ModelForm):
+    class Meta:
+        model = Assignment
+        fields = '__all__'

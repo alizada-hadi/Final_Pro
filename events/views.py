@@ -241,3 +241,15 @@ class CalendarViewNew(LoginRequiredMixin, generic.View):
             'form': forms
         }
         return render(request, self.template_name, context)
+
+
+class StudentCalenderListView(LoginRequiredMixin, generic.ListView):
+    model = Event
+    template_name = 'events/student_calendar.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(StudentCalenderListView,
+                        self).get_context_data(**kwargs)
+        context["events"] = Event.objects.all()
+
+        return context

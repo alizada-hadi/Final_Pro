@@ -24,12 +24,16 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-
+    <div class="col-lg-10 m-auto">
+        <span id="countDown" class="py-2 font-size-24">
+        </span>
+    </div>
 <div class="row">
     <div class="col-10 m-auto">
             <div class="row">
                 <div class="col-lg-8">
                     <div class="card">
+                        
                         <form action="" method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             {{ form.media }}
@@ -71,11 +75,7 @@
                                     <div class="col">
                                         <span class="text-muted ml-2" id="event-box"> {{ object.due_date|date:"M d, Y H:m:s" }} </span>
                                     </div>
-                                    <div class="col">
-                                        <span class="text-muted" id="countDown">
-                                            
-                                        </span>
-                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>

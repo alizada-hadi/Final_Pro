@@ -16,5 +16,7 @@ urlpatterns = [
          views.AssignmentDetailView.as_view(),  name="assignment-detail"),
     path("respond/<slug:slug>/",
          views.check_assignment_view, name="responds"),
-    path("respond/detail/<int:pk>/", views.respond_detail, name="respond-detail")
+    path("respond/detail/<int:pk>/", views.respond_detail, name="respond-detail"),
+    path("student/calenar/view/", views.StudentCalenderListView.as_view(),
+         name="student-calendar"),
 ]

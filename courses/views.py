@@ -1,3 +1,4 @@
+from .forms import AssignmentForm
 import datetime
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
@@ -16,7 +17,7 @@ from django.contrib.auth.mixins import (
 )
 
 from .forms import ModuleFormSet
-from django.forms.models import modelform_factory
+from django.forms.models import ModelForm, modelform_factory
 from django.apps import apps
 from departments.models import Curriculum
 from django.db.models import Count
@@ -175,7 +176,7 @@ class ContentDeleteView(View):
 class ModuleContentListView(TemplateResponseMixin, View):
     template_name = 'courses/content/content_list.html'
 
-    def get(self, request, module_id):
+    def get(self, request, module_id, *args, **kwargs):
         module = get_object_or_404(
             Module, id=module_id, course__owner=request.user)
 
