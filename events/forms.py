@@ -1,7 +1,7 @@
 from django.contrib.contenttypes import fields
 from django.forms import ModelForm, DateInput, widgets
 from django import forms
-from .models import EventMember, Event, Assignment, Respond
+from .models import EventMember, Event,  Respond
 from courses.models import Course
 from django_select2 import forms as s2forms
 
@@ -29,28 +29,6 @@ class RespondForm(ModelForm):
             "assignment": forms.HiddenInput(),
             "student": forms.HiddenInput(),
         }
-
-
-class AssignmentForm(ModelForm):
-    class Meta:
-        model = Assignment
-        fields = ['instructor', 'title', 'content',
-                  'avalibality', 'member', 'due_date']
-
-        widgets = {
-
-            "due_date": DateInput(
-                attrs={'type': 'datetime-local', 'class': 'form-control'},
-                format='%Y-%m-%dT%H:%M'
-            ),
-            "instructor": forms.HiddenInput(),
-        }
-
-    def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user', None)
-        super(AssignmentForm, self).__init__(*args, **kwargs)
-        # input_formats to parse HTML5 datetime-local input to datetime field
-        self.fields['due_date'].input_formats = ('%Y-%m-%dT%H:%M',)
 
 
 class EventForm(ModelForm):

@@ -20,17 +20,4 @@ class EventMemberAdmin(admin.ModelAdmin):
     list_filter = ['event']
 
 
-@admin.register(models.Assignment)
-class AssignmentAdmin(admin.ModelAdmin):
-    list_display = (
-        "title",
-        "content",
-        "assign_date",
-        "due_date",
-    )
-    prepopulated_fields = {
-        "slug": ("title",)
-    }
-
-
 admin.site.register(models.Respond)

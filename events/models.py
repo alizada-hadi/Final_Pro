@@ -1,3 +1,4 @@
+from courses.models import Assignment
 from students.models import Student
 from django.template.defaultfilters import slugify
 from django.db import models
@@ -70,27 +71,6 @@ class Event(EventAbstract):
     def get_html_url(self):
         url = reverse('event-detail', args=(self.id,))
         return f'<a href="{url}"> {self.title} </a>'
-
-
-class Assignment(models.Model):
-    instructor = models.ForeignKey(
-        Staff, on_delete=models.CASCADE)
-    title = models.CharField(max_length=255)
-    content = RichTextUploadingField()
-    slug = models.SlugField(unique=False, null=False)
-    assign_date = models.DateTimeField(auto_now_add=True)
-    due_date = models.DateTimeField()
-    avalibality = models.BooleanField(default=False)
-    member = models.ForeignKey(
-        Course, on_delete=models.CASCADE, blank=True, null=True)
-
-    def __str__(self):
-        return self.title
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.title)
-        return super().save(*args, **kwargs)
 
 
 class Respond(models.Model):

@@ -1,4 +1,7 @@
+from django.views.generic.edit import FormMixin
+from events.forms import RespondForm
 from .forms import AssignmentForm
+from .models import Assignment
 import datetime
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
@@ -157,7 +160,6 @@ class CourseContentCreateUpdateView(TemplateResponseMixin, View):
             obj.owner = request.user
             obj.save()
             if not id:
-                # new content
                 Content.objects.create(module=self.module, item=obj)
             return redirect('module_content_list', self.module.id)
         return self.render_to_response({'form': form, 'object': self.obj})
@@ -176,7 +178,7 @@ class ContentDeleteView(View):
 class ModuleContentListView(TemplateResponseMixin, View):
     template_name = 'courses/content/content_list.html'
 
-    def get(self, request, module_id, *args, **kwargs):
+    def get(self, request, module_id):
         module = get_object_or_404(
             Module, id=module_id, course__owner=request.user)
 
@@ -225,3 +227,47 @@ def join_course_view(request, slug):
             course.students.add(request.user.student)
         return redirect("student-course-list")
     return render(request, "courses/join.html")
+
+
+# assignment views
+
+class AssignmentCreateView(CreateView):
+    model = Assignment
+    form_class = AssignmentForm
+    template_name = 'courses/assignment/form.html'
+
+    success_url = reverse_lazy("")
+
+    def get_context_data(self, **kwargs):
+        context = super(AssignmentCreateView, self).get_context_data(**kwargs)
+        context["form"] = AssignmentForm(
+            initial={"owner": self.request.user.staff,
+                     "content": Content.objects.get(pk=self.kwargs.get("pk"))}
+        )
+        return context
+
+
+class AssignmentDetailView(FormMixin, DetailView):
+    model = Assignment
+    template_name = "courses/assignment/assignment_detail.html"
+    form_class = RespondForm
+    success_url = reverse_lazy("")
+
+    def get_context_data(self, **kwargs):
+        context = super(AssignmentDetailView, self).get_context_data(**kwargs)
+        context["form"] = RespondForm(
+            initial={"assignment": self.object, "student": self.request.user.student.pk})
+        print(context["form"])
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        form.save()
+        return super(AssignmentDetailView, self).form_valid(form)

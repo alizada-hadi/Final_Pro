@@ -1,5 +1,7 @@
+from staff.models import Staff
 from django.db import models
 from ckeditor_uploader.fields import RichTextUploadingField
+from django.db.models.base import Model
 from accounts.models import User
 from departments.models import Curriculum
 from django.contrib.contenttypes.models import ContentType
@@ -117,3 +119,24 @@ class Image(ItemBase):
 
 class Video(ItemBase):
     content = RichTextUploadingField(blank=True)
+
+
+class Assignment(models.Model):
+    owner = models.ForeignKey(
+        Staff, on_delete=models.CASCADE, related_name="owner")
+    content = models.ForeignKey(
+        Content, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    body = RichTextUploadingField()
+    slug = models.SlugField(unique=False, null=False)
+    assign_date = models.DateTimeField(auto_now_add=True)
+    due_date = models.DateTimeField()
+    avalibality = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        return super().save(*args, **kwargs)

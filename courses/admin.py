@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.db import models
-from .models import Course, Module, Session
+from .models import Course, Module, Session, Assignment
 
 
 @admin.register(Session)
@@ -9,6 +9,19 @@ class SessionAdmin(admin.ModelAdmin):
         "session",
         "session_type",
     )
+
+
+@admin.register(Assignment)
+class AssignmentAdmin(admin.ModelAdmin):
+    list_display = (
+        "title",
+        "content",
+        "assign_date",
+        "due_date",
+    )
+    prepopulated_fields = {
+        "slug": ("title",)
+    }
 
 
 class ModuleInline(admin.StackedInline):

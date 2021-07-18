@@ -12,13 +12,14 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy, reverse
 
 # Create your views here.
-from .forms import EventForm, AddMemberForm, AssignmentForm, RespondForm
+from .forms import EventForm, AddMemberForm, RespondForm
 from .utils import Calendar
-from .models import Assignment, Event, EventMember, Respond
+from .models import Event, EventMember, Respond
 from django.core.exceptions import PermissionDenied
 from django.utils.decorators import method_decorator
 from staff.decorators import staff_required
 from django.views.generic.edit import FormMixin
+from courses.models import Assignment
 
 
 def get_date(req_day):
@@ -61,95 +62,20 @@ class EventCreateView(generic.CreateView):
         return kwargs
 
 
-@method_decorator([login_required, staff_required], name="dispatch")
-class AssignmentCreateView(generic.CreateView):
-    model = Assignment
-    form_class = AssignmentForm
-    template_name = "events/assignment_form.html"
-    success_url = reverse_lazy("staff-assignment")
-
-    def get_context_data(self, **kwargs):
-        context = super(AssignmentCreateView, self).get_context_data(**kwargs)
-        context["form"] = AssignmentForm(
-            initial={"instructor": self.request.user.staff})
-        print(context["form"])
-        return context
-
-
-@method_decorator([login_required, staff_required], name="dispatch")
-class AssignmentUpdateView(generic.UpdateView):
-    model = Assignment
-    form_class = AssignmentForm
-    success_url = reverse_lazy('staff-assignment')
-
-    def form_valid(self, form):
-        assignment = form.save(commit=False)
-        assignment.user = self.request.user
-        return super(AssignmentUpdateView, self).form_valid(form)
-
-    def get_form_kwargs(self):
-        kwargs = super(AssignmentUpdateView, self).get_form_kwargs()
-        kwargs["user"] = self.request.user
-        return kwargs
-
-
-class AssignmentListView(generic.ListView):
-    model = Assignment
-    template_name = "events/assignment_list.html"
-    context_object_name = "assignments"
-
-
-@method_decorator([login_required, staff_required], name="dispatch")
-class AssignmentStaffListView(generic.ListView):
-    model = Assignment
-    template_name = "events/staff_assignment_list.html"
-    context_object_name = "assignments"
-
-    def get_queryset(self):
-        return Assignment.objects.filter(instructor=self.request.user.staff)
-
-
-class AssignmentDetailView(FormMixin, generic.DetailView):
-    model = Assignment
-    template_name = "events/assignment_detail.html"
-    form_class = RespondForm
-    success_url = reverse_lazy("assignment-list")
-
-    def get_context_data(self, **kwargs):
-        context = super(AssignmentDetailView, self).get_context_data(**kwargs)
-        context["form"] = RespondForm(
-            initial={"assignment": self.object, "student": self.request.user.student.pk})
-        print(context["form"])
-        return context
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        form = self.get_form()
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
-
-    def form_valid(self, form):
-        form.save()
-        return super(AssignmentDetailView, self).form_valid(form)
-
-
 def check_assignment_view(reqeust, slug):
     std = Student.objects.all()
     assignment = Assignment.objects.get(slug=slug)
-    number_of_students = assignment.member.students.all().count()
-    students = assignment.member.students.all()
+
     responds = Respond.objects.filter(assignment=assignment)
     number_of_respond = Respond.objects.filter(assignment=assignment).count()
-    unrespond = number_of_students - number_of_respond
+    # unrespond = number_of_students - number_of_respond
     context = {
         "assignment": assignment,
         "responds": responds,
         "number_of_respond": number_of_respond,
-        "number_of_students": number_of_students,
-        "students": students,
-        "unrespond": unrespond
+        # "number_of_students": number_of_students,
+        # "students": students,
+        # "unrespond": unrespond
     }
     return render(reqeust, "events/respond_list.html", context)
 

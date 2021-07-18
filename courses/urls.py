@@ -25,5 +25,9 @@ urlpatterns = [
     path("curriculum/<slug:curriculum>/",
          views.CourseListView.as_view(), name="course-list-curriculum"),
     path("<slug:slug>/", views.CourseDetailView.as_view(), name="course_detail"),
-    path("course/join/<slug:slug>/", views.join_course_view, name="join-to-course")
+    path("course/join/<slug:slug>/", views.join_course_view, name="join-to-course"),
+    path("course/assignment/module/<int:pk>/",
+         views.AssignmentCreateView.as_view(), name="assignment-create"),
+    path("assignment/<slug:slug>/detail/",
+         views.AssignmentDetailView.as_view(), name="assignment-detail"),
 ]

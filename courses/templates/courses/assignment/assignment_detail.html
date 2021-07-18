@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+     {{ object.title }}
+    
+{% endblock title %}
+
+
+{% block page_title %}
+{{ object.title }}
+{% endblock page_title %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb m-0">
+        <li class="breadcrumb-item"><a href="">
+            Assignment List
+        </a></li>
+        <li class="breadcrumb-item active">
+            {{ object.title }}
+        </li>
+</ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <div class="col-lg-10 m-auto">
+        <span id="countDown" class="py-2 font-size-24">
+        </span>
+    </div>
+<div class="row">
+    <div class="col-10 m-auto">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        
+                        <form action="" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form.media }}
+                            <div class="form-group">
+                                <div class="col-lg-6">
+                                {% render_field form.assignment class="form-control" %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-6">
+                                {% render_field form.student class="form-control" %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-6">
+                                    <label for="" class="font-size-18">Type Your Respond Here</label>
+                                {% render_field form.content class="form-control" %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-6">
+                                    <label for="" class="font-size-18">Complexity</label>
+                                {% render_field form.complexity class="" %}
+                                </div>
+                            </div>
+                            <button class="btn btn-primary font-size-16 mx-2 mb-2">Submit</button>
+                            </form>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card px-2">
+                        <div class="row pt-2 px-2">
+                            <div class="col-lg-1">
+                                <i class="dripicons-clock text-secondary mt-2" style="font-size: xx-large;"></i>
+                            </div>
+                            <div class="col-lg-11">
+                                <h5 class="text-secondary ml-2">Due Date</h5>
+                                <div class="row">
+                                    <div class="col">
+                                        <span class="text-muted ml-2" id="event-box"> {{ object.due_date|date:"M d, Y H:m:s" }} </span>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row py-3 px-2">
+                            <div class="col-lg-1">
+                                {% if instructor.staff.avatar %}
+                                <img src="{{ object.instructor.staff.avatar.url }}" class="avatar-sm rounded-circle" alt="">
+                                {% else %}
+                                <img src="{% static 'assets/images/users/avatar-2.jpg' %}" class="avatar-sm rounded-circle" alt="">
+                                {% endif %}
+                            </div>
+                            <div class="col-lg-11">
+                                <h5 class="text-secondary ml-4">{{ object.instructor.user.username }}</h5>
+                                <span class="text-muted ml-4"> 
+                                    {% for i in object.member.all %}
+                                        {{ i.title.title }}
+                                    {% endfor %}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="px-2">
+                            {{ object.body|safe }}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+    <script src="{% static 'assets/js/main.js' %}"></script>
+{% endblock script %}
