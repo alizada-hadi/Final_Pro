@@ -102,10 +102,10 @@
                 </div>
                 {% if object %}
                 <button class="ml-4 btn btn-primary btn-md font-size-18">Update</button>
-                <a class="btn btn-info font-size-18" href="{% url 'curriculum-detail' object.slug %}">
+                <a class="btn btn-info font-size-18" href="{% url 'curriculum-detail' object.pk %}">
                     <i class="bx bx-dots-horizontal"></i>
                 </a>
-                <a href="{% url 'curriculum-delete' object.slug %}" class="btn btn-danger font-size-18">
+                <a href="{% url 'curriculum-delete' object.pk %}" class="btn btn-danger font-size-18">
                     <i class="fa fa-trash"></i>
                 </a>
                 {% else %}

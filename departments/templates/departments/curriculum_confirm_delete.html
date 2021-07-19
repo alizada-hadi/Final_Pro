@@ -14,7 +14,7 @@
 
 {% block breadcrumb %}
 <ol class="breadcrumb m-0">
-        <li class="breadcrumb-item"><a href="{% url 'curriculum-detail' object.slug %}">Curriculum Detail</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'curriculum-detail' object.pk %}">Curriculum Detail</a></li>
         <li class="breadcrumb-item active">
             {{ object.curr_name }}
         </li>
@@ -38,7 +38,7 @@
 
                     </p>
                     <button class="btn btn-danger font-size-18" type="submit">Yes, Delete</button>
-                    <a href="{% url 'curriculum-detail' object.slug %}" class="btn btn-primary font-size-18">No, Cancel</a>
+                    <a href="{% url 'curriculum-detail' object.pk %}" class="btn btn-primary font-size-18">No, Cancel</a>
                 </form>
             </div>
         </div>

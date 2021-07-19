@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    {{ obj.dep_name }}
+{% endblock title %}
+
+
+{% block page_title %}
+   Update {{ obj.dep_name }}
+{% endblock page_title %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb m-0">
+        <li class="breadcrumb-item"><a href="{% url 'department-list' %}">Department List</a></li>
+        <li class="breadcrumb-item active">
+            {{ obj.dep_name }}
+        </li>
+</ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+<div class="row">
+    <div class="col-10 m-auto">
+        <div class="card">
+            <div class="card-body">
+
+                <h4 class="card-title">
+                    {{ obj.dep_name }}
+                </h4>
+                <hr>
+
+                <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.media }}
+                <div class="row my-2 mx-4">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="">Department Name</label>
+                            {% render_field form.dep_name class="form-control" placeholder="Information System" %}
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="">Department Status</label>
+                            {% render_field form.dep_status class="form-control" placeholder="Information System" %}
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="">Department Publish Date</label>
+                            {% render_field form.dep_publish_date class="form-control" type="date" %}
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="">Department Description</label>
+                            {% render_field form.content class="form-control"  %}
+                        </div>
+                    </div>
+                </div>
+                <button class="ml-4 btn btn-primary btn-md">Update</button>
+                </form>
+            </div>
+        </div>
+    </div> <!-- end col -->
+</div>
+{% endblock content %}

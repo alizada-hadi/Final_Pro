@@ -47,7 +47,7 @@ class Curriculum(models.Model):
     department = models.ForeignKey(
         Department, related_name="department", on_delete=models.CASCADE)
     curr_code = models.CharField(max_length=200, unique=True)
-    slug = models.SlugField(max_length=200, unique=True)
+    slug = models.SlugField(max_length=200)
     curr = models.CharField(
         max_length=20, choices=CURRICULUM, default="Bachelor")
     curr_name = models.CharField(max_length=200)
@@ -57,7 +57,7 @@ class Curriculum(models.Model):
     curr_type = models.CharField(
         max_length=50, choices=CURRICULUM_TYPE, default="Main")
 
-    curr_description = RichTextField()
+    curr_description = RichTextField(blank=True, null=True)
 
     def __str__(self):
         return self.curr_name
@@ -73,3 +73,8 @@ class Curriculum(models.Model):
     class Meta:
         # your custom permission goes here
         pass
+
+
+class CurriculumUploadList(models.Model):
+    date_upload = models.DateTimeField(auto_now_add=True)
+    csv_file = models.FileField(upload_to="curriculum/list/")

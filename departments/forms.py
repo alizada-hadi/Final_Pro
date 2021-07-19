@@ -1,6 +1,12 @@
 from django import forms
 from django.forms import fields
-from .models import Department, Curriculum
+from .models import Department, Curriculum, CurriculumUploadList
+
+
+class CurriculumUploadForm(forms.ModelForm):
+    class Meta:
+        model = CurriculumUploadList
+        fields = ["csv_file"]
 
 
 class DepForm(forms.ModelForm):

@@ -100,16 +100,6 @@
     
                                         </form>
                                     </div>
-                                    <div class="btn-group mr-1 mt-2 mb-0">
-                                        <button type="button" class="btn btn-primary font-size-18">Create New <i class="bx bx-plus"></i> </button>
-                                        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="mdi mdi-chevron-down"></i>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="/">Events</a>
-                                            <a class="dropdown-item" href="{% url 'assignment-create' module.pk %}">Assignments</a>
-                                        </div>
-                                    </div>
                                     
                                 </div>
                             </div>
@@ -118,7 +108,26 @@
                                 <div class="">
                                     {% for content in module.contents.all %}
                                     {% with item=content.item %}
-                                    <h3> {{ item.title.title }} </h3>
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                            <div class="col-lg-8">
+                                                <h3> {{ item.title.title }} </h3>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="btn-group mb-0">
+                                                    <button type="button" class="btn btn-outline-primary font-size-18">Create New <i class="bx bx-plus"></i> </button>
+                                                    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="mdi mdi-chevron-down"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item font-size-16 " href="/">Events</a>
+                                                        <a class="dropdown-item font-size-16" href="{% url 'assignment-create' content.pk %}">Assignments</a>
+                                                        <a class="dropdown-item font-size-16" href="{% url 'module-content-create' module.id "text" %}">Contents</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <p> {{ item.render }} </p>
                                     {% for a in content.assignment_set.all %}
                                     <div class="border col-lg-8 ml-5 my-2">
@@ -145,7 +154,7 @@
                                         </div>
 
                                         <div class="mt-3">
-                                            {{ a.content|safe }}
+                                            {{ a.body|safe }}
                                         </div>
                                     </div>
                                     {% endfor %}

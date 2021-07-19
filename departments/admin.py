@@ -1,3 +1,4 @@
+from .models import CurriculumUploadList
 from csfmis.settings import DEBUG
 from django.contrib import admin
 from .models import Department, Curriculum
@@ -18,3 +19,6 @@ class CurriculumAdmin(admin.ModelAdmin):
         "curr_name",
     )
     prepopulated_fields = {'slug': ('curr_name',)}
+
+
+admin.site.register(CurriculumUploadList)

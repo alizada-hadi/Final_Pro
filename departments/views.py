@@ -1,5 +1,10 @@
+from .models import CurriculumUploadList
+import csv
+from django.http.response import HttpResponse
+from students.models import Student
+from staff.models import Staff
 from django.contrib.auth.models import Group
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from departments.models import Curriculum, Department
 from django.views.generic import (
@@ -9,55 +14,65 @@ from django.views.generic import (
     DetailView,
     DeleteView
 )
-from .forms import DepForm, CurriculumForm
+from .forms import DepForm, CurriculumForm, CurriculumUploadForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from .decorators import group_required
+from django.utils.decorators import method_decorator
 
 
-class GroupRequiredMixin(object):
-    group_required = None
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            raise PermissionDenied
-        else:
-            user_groups = []
-
-            for group in request.user.groups.values_list("name", flat=True):
-                user_groups.append(group)
-            if len(set(user_groups).intersection(self.group_required)) <= 0:
-                raise PermissionDenied
-
-        return super(GroupRequiredMixin, self).dispatch(request, *args, **kwargs)
+@group_required("admin")
+def department_create_view(request):
+    if request.method == "POST":
+        form = DepForm(request.POST)
+        if form.is_valid():
+            form.save()
+    else:
+        form = DepForm()
+    context = {
+        "form": form
+    }
+    return render(request, "departments/department_form.html", context)
 
 
-class DepartmentCreateView(LoginRequiredMixin, CreateView, GroupRequiredMixin):
-    group_required = ["Managers"]
-    model = Department
-    form_class = DepForm
-    template_name = "departments/department_form.html"
-    success_url = reverse_lazy("department-list")
-
-
-class DepartmentListView(LoginRequiredMixin, ListView,  GroupRequiredMixin):
-    group_required = ["Managers"]
+class DepartmentListView(LoginRequiredMixin, ListView):
     model = Department
     template_name = "departments/department/department_list.html"
     context_object_name = "departments"
 
 
-class DepartmentUpdateView(LoginRequiredMixin, UpdateView, GroupRequiredMixin):
-    group_required = ["Managers"]
-    model = Department
-    fields = '__all__'
-    success_url = reverse_lazy("department-list")
+@group_required("admin", "dep_doan")
+def department_update_view(request, pk):
+    obj = get_object_or_404(Department, pk=pk)
+    form = DepForm()
+    if request.method == "POST":
+        form = DepForm(request.POST or None, instance=obj)
+        if form.is_valid():
+            form.save()
+            return redirect("department-list")
+    else:
+        form = DepForm(instance=obj)
+    context = {
+        "form": form
+    }
+    return render(request, "departments/department/update.html", context)
 
 
 @login_required
+@group_required("admin", "dep_doan", "Instructor")
 def department_detail(request, pk):
     department = Department.objects.get(pk=pk)
+    members = []
+    students = []
     curriculums = [[], [], [], [], [], [], [], []]
+    for staff in Staff.objects.all():
+        if staff.department.id == pk:
+            members.append(staff)
+    for student in Student.objects.all():
+        if student.department.id == pk:
+            students.append(student)
+
     for c in Curriculum.objects.all():
         if c.department.id == pk and c.curr_semester == "First":
             curriculums[0].append(c)
@@ -77,22 +92,22 @@ def department_detail(request, pk):
             curriculums[8].append(c)
     context = {
         "department": department,
-        "curriculums": curriculums
+        "curriculums": curriculums,
+        "members": members,
+        "students": students
     }
     return render(request, "departments/department/department_detail.html", context)
 
 # curriculums views
 
 
-class CurriculumCreateView(LoginRequiredMixin, CreateView,  GroupRequiredMixin):
-    group_required = ["Managers"]
+class CurriculumCreateView(LoginRequiredMixin, CreateView):
     model = Curriculum
     form_class = CurriculumForm
     template_name = "departments/curriculum_form.html"
 
 
-class CurriculumDetailView(LoginRequiredMixin, DetailView, GroupRequiredMixin):
-    group_required = ["Managers"]
+class CurriculumDetailView(LoginRequiredMixin, DetailView):
     model = Curriculum
     template_name = "departments/curriculum/curriculum_detail.html"
 
@@ -173,3 +188,29 @@ class CurriculumUpdateView(LoginRequiredMixin, UpdateView):
 class CurriculumDeleteView(LoginRequiredMixin, DeleteView):
     model = Curriculum
     template_name = "departments/curriculum_confirm_delete.html"
+
+
+class CurriculumUploadView(CreateView):
+    model = CurriculumUploadList
+    template_name = "departments/curriculum/upload.html"
+    fields = ["csv_file"]
+    success_url = reverse_lazy("curriculum-upload")
+
+
+def download_csv_file(request):
+    response = HttpResponse(content_type="text/csv")
+    response["Content-Disposition"] = 'attachment; filename="curriculum_template.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow([
+        "department",
+        "curr_code",
+        "curr",
+        "curr_name",
+        "curr_credit",
+        "curr_semester",
+        "curr_type",
+        "curr_description"
+    ])
+
+    return response

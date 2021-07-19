@@ -50,7 +50,7 @@
                                     </thead>
                                     <tbody>
                                         {% for info in i %}                           
-                                            <tr class="clickable-row" data-href="{% url 'curriculum-update' info.slug %}">
+                                            <tr class="clickable-row" data-href="{% url 'curriculum-update' info.pk %}">
                                                 <th scope="row">{{ forloop.counter }}</th>
                                                 <td>{{ info.curr_code }}</td>
                                                 <td> {{ info.curr_name }} </td>
@@ -91,7 +91,7 @@
                                 </thead>
                                 <tbody>
                                     {% for soft in s %}                           
-                                    <tr class="clickable-row" data-href="{% url 'curriculum-update' soft.slug %}">
+                                    <tr class="clickable-row" data-href="{% url 'curriculum-update' soft.pk %}">
                                         <th scope="row">{{ forloop.counter }}</th>
                                         <td>{{ soft.curr_code }}</td>
                                         <td> {{ soft.curr_name }} </td>
@@ -132,7 +132,7 @@
                                 </thead>
                                 <tbody>
                                     {% for tech in t %}                           
-                                    <tr class="clickable-row" data-href="{% url 'curriculum-update' tech.slug %}">
+                                    <tr class="clickable-row" data-href="{% url 'curriculum-update' tech.pk %}">
                                         <th scope="row">{{ forloop.counter }}</th>
                                         <td>{{ tech.curr_code }}</td>
                                         <td> {{ tech.curr_name }} </td>
